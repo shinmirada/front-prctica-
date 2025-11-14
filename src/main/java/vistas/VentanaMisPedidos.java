@@ -122,7 +122,13 @@ public class VentanaMisPedidos extends javax.swing.JFrame {
             panelMatriz.add(lblVacio);
         } else {
             for (Pedido pedido : pedidos) {
-                JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + pedido.getNombrePlato());
+                // ⭐ VALIDAR QUE nombrePlato NO SEA NULL
+                String nombrePlato = pedido.getNombrePlato();
+                if (nombrePlato == null || nombrePlato.isEmpty()) {
+                    nombrePlato = "Plato desconocido";
+                }
+
+                JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + nombrePlato);
                 boton.setForeground(Color.WHITE);
                 boton.setFont(new Font("Dialog", Font.PLAIN, 14));
 
