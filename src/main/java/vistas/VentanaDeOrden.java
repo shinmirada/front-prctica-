@@ -1,5 +1,6 @@
 package vistas;
 
+
 import apiService.PedidoApiService;
 import enums.Rol;
 import java.awt.BorderLayout;
@@ -11,30 +12,28 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import modelo.ItemPedidoDTO;
 import modelo.Pedido;
-import modelo.PedidoRequestDTO;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import util.RetrofitClient;
 
-public class VentanaDeOrden extends javax.swing.JFrame implements util.ActualizaTemaVentanas {
-
+public class VentanaDeOrden extends javax.swing.JFrame {
+    
     private PedidoApiService apiService;
     private static final Color GRIS_SUAVE = new Color(200, 200, 200);
     private static final Color ROJO_TORII = new Color(232, 74, 95);
     private String ClienteDoc;
-    private Rol rolUsuario;
+     private Rol rolUsuario;
+  
 
     public VentanaDeOrden(Rol rolUsuario, String ClienteDoc) {
-        this.ClienteDoc = ClienteDoc;
-        this.rolUsuario = rolUsuario;
+        this.ClienteDoc=ClienteDoc;
+        this.rolUsuario=rolUsuario;
         initComponents2();            // inicializa UI
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -45,159 +44,147 @@ public class VentanaDeOrden extends javax.swing.JFrame implements util.Actualiza
         estilizarBoton(btnRegresar);
         Retrofit retrofit = RetrofitClient.getClient();
         apiService = retrofit.create(PedidoApiService.class);
-        // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
-
-        // Aplicar color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
-    }
-
-    @Override
-    public void aplicarColor(Color nuevoColor) {
-        panelOrdenPedido.setBackground(nuevoColor);
-        btnDomicilio.setBackground(nuevoColor.darker());
-        btnRestaurante.setBackground(nuevoColor.darker());
-        btnRegresar.setBackground(nuevoColor.darker());
     }
 
     private void llenarComboBox() {
 
-        String[] elementos = {
+   String[] elementos = {
             "1 - Sushi clasico", "2 - Ramen especial", "3 - Bento Teriyaki", "4 - Tempura mixto",
             "5 - Udon tradicional", "6 - Yakisoba"
         };
         comboPlatos.setModel(new DefaultComboBoxModel<>(elementos));
-
+    
     }
+    
 
-    @SuppressWarnings("unchecked")
-    private void initComponents2() {
+@SuppressWarnings("unchecked")
+private void initComponents2() {
 
-        panelOrdenPedido = new javax.swing.JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g.create();
-                int w = getWidth(), h = getHeight();
-                Color top = new Color(255, 230, 230);
-                Color bottom = new Color(240, 200, 200);
-                g2.setPaint(new GradientPaint(0, 0, top, 0, h, bottom));
-                g2.fillRect(0, 0, w, h);
-                g2.dispose();
-            }
-        };
+    panelOrdenPedido = new javax.swing.JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g.create();
+            int w = getWidth(), h = getHeight();
+            Color top = new Color(255, 230, 230);
+            Color bottom = new Color(240, 200, 200);
+            g2.setPaint(new GradientPaint(0, 0, top, 0, h, bottom));
+            g2.fillRect(0, 0, w, h);
+            g2.dispose();
+        }
+    };
 
-        jLabelSubtitulo = new javax.swing.JLabel();
-        comboPlatos = new javax.swing.JComboBox<>();
-        btnDomicilio = new javax.swing.JButton();
-        btnRestaurante = new javax.swing.JButton();
-        btnRegresar = new javax.swing.JButton();
+    jLabelSubtitulo = new javax.swing.JLabel();
+    comboPlatos = new javax.swing.JComboBox<>();
+    btnDomicilio = new javax.swing.JButton();
+    btnRestaurante = new javax.swing.JButton();
+    btnRegresar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Ventana orden cliente");
+    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("Ventana orden cliente");
 
-        // ---- Config panel principal ----
-        panelOrdenPedido.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)),
-                ".........................Orden de pedido.........................",
-                javax.swing.border.TitledBorder.CENTER,
-                javax.swing.border.TitledBorder.ABOVE_TOP,
-                new java.awt.Font("Gabriola", 0, 36),
-                new java.awt.Color(0, 0, 0)));
-        panelOrdenPedido.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15);
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.CENTER;
+    // ---- Config panel principal ----
+    panelOrdenPedido.setBorder(javax.swing.BorderFactory.createTitledBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)),
+            ".........................Orden de pedido.........................",
+            javax.swing.border.TitledBorder.CENTER,
+            javax.swing.border.TitledBorder.ABOVE_TOP,
+            new java.awt.Font("Gabriola", 0, 36),
+            new java.awt.Color(0, 0, 0)));
+    panelOrdenPedido.setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.insets = new Insets(15, 15, 15, 15);
+    gbc.fill = GridBagConstraints.NONE;
+    gbc.anchor = GridBagConstraints.CENTER;
 
-        // ---- Subtítulo ----
-        jLabelSubtitulo.setFont(new java.awt.Font("Elephant", 0, 20));
-        jLabelSubtitulo.setForeground(Color.BLACK);
-        jLabelSubtitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelSubtitulo.setText("Porfavor Seleccione Su Plato y Modalidad De Servicio");
+    // ---- Subtítulo ----
+    jLabelSubtitulo.setFont(new java.awt.Font("Elephant", 0, 20));
+    jLabelSubtitulo.setForeground(Color.BLACK);
+    jLabelSubtitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabelSubtitulo.setText("Porfavor Seleccione Su Plato y Modalidad De Servicio");
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        panelOrdenPedido.add(jLabelSubtitulo, gbc);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.gridwidth = 2;
+    panelOrdenPedido.add(jLabelSubtitulo, gbc);
 
-        // ---- Combo ----
-        comboPlatos.setFont(new java.awt.Font("Segoe UI", 0, 16));
-        comboPlatos.setPreferredSize(new java.awt.Dimension(280, 35));
+    // ---- Combo ----
+    comboPlatos.setFont(new java.awt.Font("Segoe UI", 0, 16));
+    comboPlatos.setPreferredSize(new java.awt.Dimension(280, 35));
 
-        gbc.gridy = 1;
-        panelOrdenPedido.add(comboPlatos, gbc);
+    gbc.gridy = 1;
+    panelOrdenPedido.add(comboPlatos, gbc);
 
-        // ---- Botón Domicilio ----
-        btnDomicilio.setText("Pedir A Domicilio");
-        btnDomicilio.setBackground(new java.awt.Color(232, 74, 95));
-        btnDomicilio.setForeground(Color.WHITE);
-        btnDomicilio.setPreferredSize(new java.awt.Dimension(200, 40));
-        btnDomicilio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDomicilioActionPerformed(evt);
-            }
-        });
+    // ---- Botón Domicilio ----
+    btnDomicilio.setText("Pedir A Domicilio");
+    btnDomicilio.setBackground(new java.awt.Color(232, 74, 95));
+    btnDomicilio.setForeground(Color.WHITE);
+    btnDomicilio.setPreferredSize(new java.awt.Dimension(200, 40));
+    btnDomicilio.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnDomicilioActionPerformed(evt);
+        }
+    });
 
-        gbc.gridy = 2;
-        gbc.gridx = 0;
-        gbc.gridwidth = 1;
-        panelOrdenPedido.add(btnDomicilio, gbc);
+    gbc.gridy = 2;
+    gbc.gridx = 0;
+    gbc.gridwidth = 1;
+    panelOrdenPedido.add(btnDomicilio, gbc);
 
-        // ---- Botón Restaurante ----
-        btnRestaurante.setText("Comer En El Restaurante");
-        btnRestaurante.setBackground(new java.awt.Color(232, 74, 95));
-        btnRestaurante.setForeground(Color.WHITE);
-        btnRestaurante.setPreferredSize(new java.awt.Dimension(200, 40));
-        btnRestaurante.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRestauranteActionPerformed(evt);
-            }
-        });
+    // ---- Botón Restaurante ----
+    btnRestaurante.setText("Comer En El Restaurante");
+    btnRestaurante.setBackground(new java.awt.Color(232, 74, 95));
+    btnRestaurante.setForeground(Color.WHITE);
+    btnRestaurante.setPreferredSize(new java.awt.Dimension(200, 40));
+    btnRestaurante.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnRestauranteActionPerformed(evt);
+        }
+    });
 
-        gbc.gridx = 1;
-        panelOrdenPedido.add(btnRestaurante, gbc);
+    gbc.gridx = 1;
+    panelOrdenPedido.add(btnRestaurante, gbc);
 
-        // ---- Botón Regresar ----
-        btnRegresar.setText("Regresar");
-        btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
-        btnRegresar.setForeground(Color.WHITE);
-        btnRegresar.setPreferredSize(new java.awt.Dimension(150, 35));
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
+    // ---- Botón Regresar ----
+    btnRegresar.setText("Regresar");
+    btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
+    btnRegresar.setForeground(Color.WHITE);
+    btnRegresar.setPreferredSize(new java.awt.Dimension(150, 35));
+    btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnRegresarActionPerformed(evt);
+        }
+    });
 
-        gbc.gridy = 3;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        panelOrdenPedido.add(btnRegresar, gbc);
+    gbc.gridy = 3;
+    gbc.gridx = 0;
+    gbc.gridwidth = 2;
+    panelOrdenPedido.add(btnRegresar, gbc);
 
-        // ---- Añadir panel principal ----
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(panelOrdenPedido, BorderLayout.CENTER);
+    // ---- Añadir panel principal ----
+    getContentPane().setLayout(new BorderLayout());
+    getContentPane().add(panelOrdenPedido, BorderLayout.CENTER);
 
-        pack();
-    }
+    pack();
+}
+private void estilizarBoton(javax.swing.JButton boton) {
+    boton.setFocusPainted(false);
+    boton.setBorderPainted(false);
+    boton.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
 
-    private void estilizarBoton(javax.swing.JButton boton) {
-        boton.setFocusPainted(false);
-        boton.setBorderPainted(false);
-        boton.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 14));
+    boton.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseEntered(java.awt.event.MouseEvent e) {
+            boton.setBackground(new java.awt.Color(200, 50, 70));
+        }
+        @Override
+        public void mouseExited(java.awt.event.MouseEvent e) {
+            boton.setBackground(new java.awt.Color(232, 74, 95));
+        }
+    });
+}
+    
 
-        boton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                boton.setBackground(new java.awt.Color(200, 50, 70));
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                boton.setBackground(new java.awt.Color(232, 74, 95));
-            }
-        });
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -309,24 +296,24 @@ public class VentanaDeOrden extends javax.swing.JFrame implements util.Actualiza
 
     private void btnRestauranteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestauranteActionPerformed
         // TODO add your handling code here:
+
         String seleccionado = comboPlatos.getSelectedItem().toString();
+
         int idPlato = Integer.parseInt(seleccionado.split(" - ")[0].trim());
 
-        List<ItemPedidoDTO> items = new ArrayList<>();
-        items.add(new ItemPedidoDTO(idPlato, 1));
-
-        PedidoRequestDTO pedidoRequest = new PedidoRequestDTO();
-        pedidoRequest.setClienteDoc(ClienteDoc);
-        pedidoRequest.setEsDomicilio(false);
-        pedidoRequest.setItems(items);
+        Pedido pedido = new Pedido();
+        pedido.setIdPlato(idPlato);
+        pedido.setEsDomicilio(false);
+        pedido.setClienteDoc(ClienteDoc);
 
         try {
-            Response<Pedido> response = apiService.createPedido(pedidoRequest).execute();
+
+            Response<Pedido> response = apiService.createPedido(pedido).execute();
 
             if (response.isSuccessful() && response.body() != null) {
                 Pedido creado = response.body();
                 JOptionPane.showMessageDialog(this,
-                        "✅ Pedido creado correctamente\n"
+                        " Pedido creado correctamente\n"
                         + "ID Pedido: " + creado.getId() + "\n"
                         + "Plato: " + seleccionado + "\n"
                         + "Modalidad: Restaurante");
@@ -336,13 +323,16 @@ public class VentanaDeOrden extends javax.swing.JFrame implements util.Actualiza
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this,
-                        " Error al crear el pedido. Código HTTP: " + response.code());
+                        "️ Error al crear el pedido. Código HTTP: " + response.code());
             }
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
                     " Error de conexión con el servidor");
             e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "️ Error inesperado: " + e.getMessage());
         }
 
 
@@ -350,25 +340,23 @@ public class VentanaDeOrden extends javax.swing.JFrame implements util.Actualiza
 
     private void btnDomicilioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDomicilioActionPerformed
         // TODO add your handling code here:
-        String seleccionado = comboPlatos.getSelectedItem().toString();
+         String seleccionado = comboPlatos.getSelectedItem().toString();
+
         int idPlato = Integer.parseInt(seleccionado.split(" - ")[0].trim());
 
-     
-        List<ItemPedidoDTO> items = new ArrayList<>();
-        items.add(new ItemPedidoDTO(idPlato, 1));
-
-        PedidoRequestDTO pedidoRequest = new PedidoRequestDTO();
-        pedidoRequest.setClienteDoc(ClienteDoc);
-        pedidoRequest.setEsDomicilio(true);
-        pedidoRequest.setItems(items);
+        Pedido pedido = new Pedido();
+        pedido.setIdPlato(idPlato);
+        pedido.setEsDomicilio(true);
+        pedido.setClienteDoc(ClienteDoc);
 
         try {
-            Response<Pedido> response = apiService.createPedido(pedidoRequest).execute();
+
+            Response<Pedido> response = apiService.createPedido(pedido).execute();
 
             if (response.isSuccessful() && response.body() != null) {
                 Pedido creado = response.body();
                 JOptionPane.showMessageDialog(this,
-                        "✅ Pedido creado correctamente\n"
+                        " Pedido creado correctamente\n"
                         + "ID Pedido: " + creado.getId() + "\n"
                         + "Plato: " + seleccionado + "\n"
                         + "Modalidad: Domicilio");
@@ -385,21 +373,23 @@ public class VentanaDeOrden extends javax.swing.JFrame implements util.Actualiza
             JOptionPane.showMessageDialog(this,
                     " Error de conexión con el servidor");
             e.printStackTrace();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "️ Error inesperado: " + e.getMessage());
         }
-
 
     }//GEN-LAST:event_btnDomicilioActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        VentanaDeCombos ventana = new VentanaDeCombos(rolUsuario, ClienteDoc);
-        ventana.setVisible(true);
+       VentanaDeCombos ventana=new VentanaDeCombos(rolUsuario, ClienteDoc);
+       ventana.setVisible(true);
         this.setVisible(false);
 
 
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDomicilio;
     private javax.swing.JButton btnRegresar;
@@ -409,4 +399,5 @@ public class VentanaDeOrden extends javax.swing.JFrame implements util.Actualiza
     private javax.swing.JPanel panelOrdenPedido;
     // End of variables declaration//GEN-END:variables
 
+ 
 }

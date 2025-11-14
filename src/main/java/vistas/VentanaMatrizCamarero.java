@@ -22,11 +22,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
     private Rol rolUsuario;
     private String clienteDoc;
 
-    // Declarar los botones como variables de instancia
-    private JButton btnAtras;
-    private JButton btnActualizar;
-    private JButton btnSiguiente;
-
     private static final Color ROSA_PASTEL = new Color(0xF9, 0xC5, 0xD5);
     private static final Color BLANCO_CREMOSO = new Color(0xFF, 0xF8, 0xF0);
     private static final Color ROJO_TORII = new Color(0xE8, 0x4A, 0x5F);
@@ -61,10 +56,10 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         panelContenido.setBackground(ROSA_PASTEL);
         panelContenido.add(scroll, BorderLayout.CENTER);
 
-        // CREAR los botones ANTES de usarlos
-        btnAtras = new JButton("Atrás");
-        btnActualizar = new JButton("Actualizar Lista");
-        btnSiguiente = new JButton("Siguiente ➜");
+      
+        JButton btnAtras = new JButton("Atrás");
+        JButton btnActualizar = new JButton("Actualizar Lista");
+        JButton btnSiguiente = new JButton("Siguiente ➜");
 
         JButton[] navButtons = {btnAtras, btnActualizar, btnSiguiente};
         for (JButton b : navButtons) {
@@ -83,22 +78,25 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         getContentPane().add(panelContenido, BorderLayout.CENTER);
         getContentPane().add(panelNavegacion, BorderLayout.SOUTH);
 
+      
         btnAtras.addActionListener(e -> {
             new Ventana_InicioSesionUser().setVisible(true);
             this.setVisible(false);
         });
 
+   
         btnActualizar.addActionListener(e -> cargarPedidos());
 
+      
         btnSiguiente.addActionListener(e -> {
             Ventana_Facturas ventana = new Ventana_Facturas(rolUsuario, clienteDoc);
             ventana.setVisible(true);
             this.setVisible(false);
         });
 
+      
         cargarPedidos();
     }
-
 
     private void cargarPedidos() {
         panelMatriz.removeAll();
@@ -207,16 +205,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al conectar con el servidor: " + e.getMessage());
         }
     }
-    
-     // Aqui agregamos el metodo para cambio de color dinamico
-   /* @Override
-    public void aplicarColor(Color nuevoColor) {
-        panelContenido.setBackground(nuevoColor);
-        panelNavegacion.setBackground(nuevoColor);
-        btnAtras.setBackground(nuevoColor.darker());
-        btnActualizar.setBackground(nuevoColor.darker());
-        btnSiguiente.setBackground(nuevoColor.darker());
-    }*/
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

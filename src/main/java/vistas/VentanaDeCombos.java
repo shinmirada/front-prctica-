@@ -1,18 +1,27 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package vistas;
+
 
 import apiService.PlatoApiService;
 import enums.Rol;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.util.List;
+import java.util.List; 
 import javax.swing.border.TitledBorder;
 import modelo.Plato;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import util.RetrofitClient;
 
-public class VentanaDeCombos extends javax.swing.JFrame implements util.ActualizaTemaVentanas {
+/**
+ *
+ * @author Dilan
+ */
+public class VentanaDeCombos extends javax.swing.JFrame {
 
     private PlatoApiService apiService;
     private List<Plato> listaPlatos;
@@ -21,16 +30,15 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
     private JButton btnSiguiente, btnAtras;
     private String ClienteDoc;
     private Rol rolUsuario;
-
-    //colores base..
     private final Color ROSA_SAKURA = new Color(250, 218, 221);
     private final Color ROJO_TORII = new Color(232, 74, 95);
     private final Color BLANCO_CREMOSO = new Color(255, 248, 240);
     private final Color MARRON_MADERA = new Color(139, 94, 60);
+    
 
-    public VentanaDeCombos(Rol rolUsuario, String ClienteDoc) {
-        this.ClienteDoc = ClienteDoc;
-        this.rolUsuario = rolUsuario;
+    public VentanaDeCombos(Rol rolUsuario,String ClienteDoc) {
+        this.ClienteDoc=ClienteDoc;
+        this.rolUsuario=rolUsuario;
         initComponents();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,9 +46,11 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
         initCustomComponents();
         setLocationRelativeTo(null);
 
+        
         Retrofit retrofit = RetrofitClient.getClient();
         apiService = retrofit.create(PlatoApiService.class);
 
+     
         cargarPlatosDesdeServidor();
     }
 
@@ -49,7 +59,7 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
 
         TitledBorder border = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(MARRON_MADERA),
-                ".............. Menu de Platos ..............",
+                ".............. Menú de Platos ..............",
                 TitledBorder.CENTER,
                 TitledBorder.ABOVE_TOP,
                 new Font("Gabriola", Font.PLAIN, 36),
@@ -84,18 +94,13 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
         });
 
         btnSiguiente.addActionListener(e -> {
-            VentanaDeOrden ventana = new VentanaDeOrden(rolUsuario, ClienteDoc);
+             VentanaDeOrden ventana = new VentanaDeOrden(rolUsuario, ClienteDoc);
             ventana.setVisible(true);
             this.setVisible(false);
         });
-
-        // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
-
-        // Aplicar color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
     }
 
+  
     private void cargarPlatosDesdeServidor() {
         try {
             Response<List<Plato>> response = apiService.getAllPlatos().execute();
@@ -112,11 +117,12 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
         }
     }
 
+ 
     private void dibujarBotonesDinamicos(List<Plato> platos) {
         panelBotones.removeAll();
 
         int total = platos.size();
-        int filas = (int) Math.ceil(total / 3.0);
+        int filas = (int) Math.ceil(total / 3.0); 
         botones = new JButton[filas][3];
         panelBotones.setLayout(new GridLayout(filas, 3, 10, 10));
 
@@ -130,26 +136,12 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
                 btnPlato.setBackground(BLANCO_CREMOSO);
                 btnPlato.setFont(new Font("Dialog", Font.PLAIN, 12));
 
-                // Usar una variable final para el ActionListener
-                final Plato platoFinal = plato;
                 btnPlato.addActionListener(evt -> {
-                    try {
-                        // Crear y mostrar la ventana de detalles
-                        VentanaPlatos ventanaDetalle = new VentanaPlatos(
-                                platoFinal.getNombre(),
-                                platoFinal.getDescripcion(),
-                                "$" + platoFinal.getPrecio()
-                        );
-                        ventanaDetalle.setVisible(true);
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(
-                                VentanaDeCombos.this,
-                                "Error al mostrar detalles: " + e.getMessage(),
-                                "Error",
-                                JOptionPane.ERROR_MESSAGE
-                        );
-                        e.printStackTrace();
-                    }
+                    new VentanaPlatos(
+                            plato.getNombre(),
+                            plato.getDescripcion(),
+                            "$" + plato.getPrecio()
+                    ).setVisible(true);
                 });
 
                 panelBotones.add(btnPlato);
@@ -160,13 +152,6 @@ public class VentanaDeCombos extends javax.swing.JFrame implements util.Actualiz
 
         panelBotones.revalidate();
         panelBotones.repaint();
-    }
-
-    @Override
-    public void aplicarColor(Color nuevoColor) {
-        panelBotones.setBackground(nuevoColor);
-        btnAtras.setBackground(nuevoColor.darker());
-        btnSiguiente.setBackground(nuevoColor.darker());
     }
 
     @SuppressWarnings("unchecked")

@@ -22,7 +22,7 @@ import util.RetrofitClient;
  *
  * @author MI PC
  */
-public class VentanaRegistro extends javax.swing.JFrame implements util.ActualizaTemaVentanas {
+public class VentanaRegistro extends javax.swing.JFrame {
 
   private UsuarioApiService apiService;
 
@@ -34,31 +34,19 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setTitle("Registro de Clientes");
         setLocationRelativeTo(null);
-        // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
 
-        // Aplicar color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
-
-    }  
-
-      @Override
-    public void aplicarColor(Color nuevoColor) {
-        panelRegistroClientes.setBackground(nuevoColor);
-        jTabbedPane1.setBackground(nuevoColor.darker());
-        jPanelFormulario.setBackground(nuevoColor);
-        jPanelTabla.setBackground(nuevoColor);
-        btnRegistro.setBackground(nuevoColor.darker());
-        btnRegresar.setBackground(nuevoColor.darker());
     }
-    
+
+  
+
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         panelRegistroClientes = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanelFormulario = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -75,7 +63,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
         txtUsuario = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         btnRegistro = new javax.swing.JButton();
-        jPanelTabla = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClientes = new javax.swing.JTable();
         btnRegresar = new javax.swing.JButton();
@@ -84,19 +72,22 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
         setTitle("Ventana Registro\n");
 
         panelRegistroClientes.setBackground(new java.awt.Color(250, 218, 221));
-        panelRegistroClientes.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)), "         ......................Registro de clientes.........................", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Gabriola", 0, 36))); // NOI18N
+        panelRegistroClientes.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)), "         ......................Registro de clientes.........................", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Gabriola", 0, 36), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jTabbedPane1.setBackground(new java.awt.Color(168, 198, 134));
 
-        jPanelFormulario.setBackground(new java.awt.Color(168, 198, 134));
+        jPanel3.setBackground(new java.awt.Color(168, 198, 134));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Nombre:");
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Tipo de Documento:");
 
         jLabel3.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Numero de Documento:");
 
         txtNombrePropietario.setToolTipText("Ingresa nombre del propietario");
@@ -104,15 +95,19 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
         cbTipoDocumento.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "...", "Cedula", "Tarjeta Identidad", "Cedula extranjera" }));
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("Telefono:");
 
         jLabel5.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Direccion:");
 
         jLabel6.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Usuario:");
 
         lblContraeña.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
+        lblContraeña.setForeground(new java.awt.Color(0, 0, 0));
         lblContraeña.setText("Contraseña:");
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/conejopelion.jpg"))); // NOI18N
@@ -128,90 +123,90 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
             }
         });
 
-        javax.swing.GroupLayout jPanelFormularioLayout = new javax.swing.GroupLayout(jPanelFormulario);
-        jPanelFormulario.setLayout(jPanelFormularioLayout);
-        jPanelFormularioLayout.setHorizontalGroup(
-            jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelFormularioLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanelFormularioLayout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelFormularioLayout.createSequentialGroup()
-                        .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
                             .addComponent(lblContraeña))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(txtTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                                 .addComponent(txtDireccion)
                                 .addComponent(txtUsuario))
                             .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanelFormularioLayout.createSequentialGroup()
-                        .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtNombrePropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(cbTipoDocumento, 0, 217, Short.MAX_VALUE)
                                 .addComponent(txtNumeroDocumento)))))
                 .addGap(31, 31, 31))
         );
-        jPanelFormularioLayout.setVerticalGroup(
-            jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelFormularioLayout.createSequentialGroup()
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombrePropietario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(cbTipoDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNumeroDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(19, 19, 19)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(19, 19, 19)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblContraeña)
                     .addComponent(txtContraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanelFormularioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelFormularioLayout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addContainerGap(23, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelFormularioLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnRegistro, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(46, 46, 46))))
         );
 
-        jTabbedPane1.addTab("Registro", jPanelFormulario);
+        jTabbedPane1.addTab("Registro", jPanel3);
 
-        jPanelTabla.setBackground(new java.awt.Color(168, 198, 134));
-        jPanelTabla.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "..........................................................Clientes...........................................................................", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Dialog", 1, 12))); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(168, 198, 134));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 43, 45)), "..........................................................Clientes...........................................................................", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.BELOW_TOP, new java.awt.Font("Dialog", 1, 12))); // NOI18N
 
         tblClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -234,24 +229,24 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
         });
         jScrollPane1.setViewportView(tblClientes);
 
-        javax.swing.GroupLayout jPanelTablaLayout = new javax.swing.GroupLayout(jPanelTabla);
-        jPanelTabla.setLayout(jPanelTablaLayout);
-        jPanelTablaLayout.setHorizontalGroup(
-            jPanelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTablaLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 406, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanelTablaLayout.setVerticalGroup(
-            jPanelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelTablaLayout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(275, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Tabla", jPanelTabla);
+        jTabbedPane1.addTab("Tabla", jPanel1);
 
         btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
         btnRegresar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -307,7 +302,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
 
     panelRegistroClientes = new javax.swing.JPanel();
     jTabbedPane1 = new javax.swing.JTabbedPane();
-    jPanelFormulario = new javax.swing.JPanel();
+    jPanel3 = new javax.swing.JPanel();
     jLabel1 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
     txtNombrePropietario = new javax.swing.JTextField();
@@ -321,11 +316,11 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
     lblContraeña = new javax.swing.JLabel();
     txtUsuario = new javax.swing.JTextField();
     jLabel7 = new javax.swing.JLabel();
-    jPanelTabla = new javax.swing.JPanel();
+    jPanel1 = new javax.swing.JPanel();
     jScrollPane1 = new javax.swing.JScrollPane();
     tblClientes = new javax.swing.JTable();
     btnRegresar = new javax.swing.JButton();
-    btnRegistro= new javax.swing.JButton(); 
+    btnRegistro= new javax.swing.JButton(); // <<< nuevo botón
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setTitle("Ventana Registro");
@@ -343,7 +338,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
     panelRegistroClientes.setLayout(new java.awt.BorderLayout(10,10)); // BorderLayout con márgenes
 
     // ===== PESTAÑA REGISTRO =====
-    jPanelFormulario.setBackground(new java.awt.Color(168, 198, 134));
+    jPanel3.setBackground(new java.awt.Color(168, 198, 134));
 
     jLabel1.setFont(new java.awt.Font("Verdana", 1, 14));
     jLabel1.setText("Nombre:");
@@ -360,7 +355,7 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
 
     jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/conejopelion.jpg")));
 
-    // === Boton Registrar ===
+    // === Botón Registrar ===
     btnRegistro.setBackground(new java.awt.Color(232,74,95));
     btnRegistro.setFont(new java.awt.Font("Dialog", 1, 14));
     btnRegistro.setForeground(new java.awt.Color(255, 255, 255));
@@ -371,8 +366,8 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
         }
     });
 
-    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanelFormulario);
-    jPanelFormulario.setLayout(jPanel3Layout);
+    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+    jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
         jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
         .addGroup(jPanel3Layout.createSequentialGroup()
@@ -434,11 +429,11 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
             .addContainerGap(20, Short.MAX_VALUE))
     );
 
-    jTabbedPane1.addTab("Registro", jPanelFormulario);
+    jTabbedPane1.addTab("Registro", jPanel3);
 
     // ===== PESTAÑA TABLA =====
-    jPanelTabla.setBackground(new java.awt.Color(168, 198, 134));
-    jPanelTabla.setLayout(new java.awt.BorderLayout());
+    jPanel1.setBackground(new java.awt.Color(168, 198, 134));
+    jPanel1.setLayout(new java.awt.BorderLayout());
 
     tblClientes.setModel(new javax.swing.table.DefaultTableModel(
         new Object [][] {},
@@ -448,9 +443,9 @@ public class VentanaRegistro extends javax.swing.JFrame implements util.Actualiz
     ));
     jScrollPane1.setViewportView(tblClientes);
 
-    jPanelTabla.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+    jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-    jTabbedPane1.addTab("Tabla", jPanelTabla);
+    jTabbedPane1.addTab("Tabla", jPanel1);
 
     // ===== BOTÓN REGRESAR ABAJO =====
     btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
@@ -561,8 +556,8 @@ private void llenartabla() {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanelFormulario;
-    private javax.swing.JPanel jPanelTabla;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel lblContraeña;

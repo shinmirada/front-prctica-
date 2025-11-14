@@ -13,7 +13,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import util.RetrofitClient;
 
-public class Ventana_Facturas extends javax.swing.JFrame implements util.ActualizaTemaVentanas {
+public class Ventana_Facturas extends javax.swing.JFrame {
 
     private Rol rolUsuario;
     private String clienteDoc;
@@ -26,7 +26,7 @@ public class Ventana_Facturas extends javax.swing.JFrame implements util.Actuali
         this.rolUsuario = rolUsuario;
         this.clienteDoc = clienteDoc;
 
-        initComponents();
+        initComponents();  
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -35,27 +35,10 @@ public class Ventana_Facturas extends javax.swing.JFrame implements util.Actuali
         apiService = retrofit.create(FacturaApiService.class);
 
         configurarVentanaPorRol();
-        // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
-
-        // Aplicar color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
-    }
-
-    @Override
-    public void aplicarColor(Color nuevoColor) {
-        jPanelRosa.setBackground(nuevoColor);
-        jPanelVerde.setBackground(nuevoColor);
-        jPanel3.setBackground(nuevoColor);
-        jTabbedPane1.setBackground(nuevoColor);
-        btnRegresar.setBackground(nuevoColor.darker());
-        jButton1.setBackground(nuevoColor.darker());
-        btnAccion.setBackground(nuevoColor.darker());
-
     }
 
     private void configurarVentanaPorRol() {
-
+    
         jPanelVerde.removeAll();
         jPanelVerde.setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
@@ -95,18 +78,21 @@ public class Ventana_Facturas extends javax.swing.JFrame implements util.Actuali
         gbc.gridwidth = 2;
         jPanelVerde.add(btnAccion, gbc);
 
+       
         if (rolUsuario == Rol.CLIENTE) {
             btnAccion.setText("Consultar Mis Facturas");
-            txtDocumento.setText(clienteDoc);
-            txtDocumento.setEditable(false);
-            txtPedidoId.setEditable(false);
+            txtDocumento.setText(clienteDoc);           
+            txtDocumento.setEditable(false);          
+            txtPedidoId.setEditable(false);           
             btnAccion.addActionListener(e -> consultarFacturasCliente());
 
+           
             if (jTabbedPane1.getTabCount() > 0) {
                 jTabbedPane1.setEnabledAt(0, false);
-                jTabbedPane1.setSelectedIndex(1);
+                jTabbedPane1.setSelectedIndex(1);  
             }
 
+       
             consultarFacturasCliente();
         } else {
             btnAccion.setText("Registrar Factura");
@@ -115,6 +101,7 @@ public class Ventana_Facturas extends javax.swing.JFrame implements util.Actuali
             txtPedidoId.setEditable(true);
             btnAccion.addActionListener(e -> generarFactura());
 
+    
             if (jTabbedPane1.getTabCount() > 0) {
                 jTabbedPane1.setEnabledAt(0, true);
             }
@@ -126,7 +113,7 @@ public class Ventana_Facturas extends javax.swing.JFrame implements util.Actuali
     }
 
     private void consultarFacturasCliente() {
-        final String doc = this.clienteDoc;
+        final String doc = this.clienteDoc; 
 
         javax.swing.SwingWorker<java.util.List<Factura>, Void> worker = new javax.swing.SwingWorker<>() {
             @Override
@@ -426,20 +413,21 @@ public class Ventana_Facturas extends javax.swing.JFrame implements util.Actuali
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+          
+    this.setVisible(false);
 
-        this.setVisible(false);
+    
+    if (rolUsuario == Rol.MESERO) {
+        VentanaMatrizCamarero ventana = new VentanaMatrizCamarero(rolUsuario, clienteDoc);
+        ventana.setVisible(true);
+    } else if (rolUsuario == Rol.CLIENTE) {
+        VentanaMisPedidos ventana = new VentanaMisPedidos(rolUsuario, clienteDoc);
+        ventana.setVisible(true);
+    } else {
 
-        if (rolUsuario == Rol.MESERO) {
-            VentanaMatrizCamarero ventana = new VentanaMatrizCamarero(rolUsuario, clienteDoc);
-            ventana.setVisible(true);
-        } else if (rolUsuario == Rol.CLIENTE) {
-            VentanaMisPedidos ventana = new VentanaMisPedidos(rolUsuario, clienteDoc);
-            ventana.setVisible(true);
-        } else {
-
-            JOptionPane.showMessageDialog(this, "Rol no reconocido");
-            this.setVisible(true);
-        }
+        JOptionPane.showMessageDialog(this, "Rol no reconocido");
+        this.setVisible(true);
+    }
     }//GEN-LAST:event_btnRegresarActionPerformed
 
 

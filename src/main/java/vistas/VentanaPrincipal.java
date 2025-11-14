@@ -1,8 +1,18 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
 package vistas;
-import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-public class VentanaPrincipal extends javax.swing.JFrame implements util.ActualizaTemaVentanas{
+
+/**
+ *
+ * @author Dilan
+ */
+public class VentanaPrincipal extends javax.swing.JFrame {
+
+
 
     public VentanaPrincipal() {
         initComponentsmodificadoPersonal();
@@ -10,27 +20,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements util.Actuali
         setTitle("Ventana Principal");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-     // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
-
-        // Aplicar color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
     }
-
-    @Override
-    public void aplicarColor(Color nuevoColor) {
-        // Cambiar el fondo principal
-        jPanel1.setBackground(nuevoColor);
-
-        // Cambiar botones
-        btnContinuar.setBackground(nuevoColor.darker());
-
-        // Menu y barra de menu
-        jMenuBar1.setBackground(nuevoColor.darker());
-        jMenu5.setBackground(nuevoColor);
-        jMenuItem4.setBackground(nuevoColor.darker());
-    }
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -238,7 +228,7 @@ public class VentanaPrincipal extends javax.swing.JFrame implements util.Actuali
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
-        new VentanaPrincipal().setVisible(true);
+            new VentanaPrincipal().setVisible(true);
         });
     }
 
@@ -251,5 +241,4 @@ public class VentanaPrincipal extends javax.swing.JFrame implements util.Actuali
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
-
 }

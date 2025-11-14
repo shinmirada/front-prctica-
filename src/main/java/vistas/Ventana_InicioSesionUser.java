@@ -4,6 +4,7 @@
  */
 package vistas;
 
+
 import apiService.UsuarioApiService;
 import enums.Rol;
 import java.io.IOException;
@@ -17,29 +18,21 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import util.RetrofitClient;
 
-public class Ventana_InicioSesionUser extends javax.swing.JFrame implements util.ActualizaTemaVentanas {
+/**
+ *
+ * @author Dilan
+ */
+public class Ventana_InicioSesionUser extends javax.swing.JFrame {
 
-    private UsuarioApiService apiService;
+      private UsuarioApiService apiService;
 
     public Ventana_InicioSesionUser() {
         initComponentsCustomizado();
-        Retrofit retrofit = RetrofitClient.getClient();
+         Retrofit retrofit = RetrofitClient.getClient();
         apiService = retrofit.create(UsuarioApiService.class);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
 
-        // Aplicar color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
-
-    }
-
-    @Override
-    public void aplicarColor(java.awt.Color nuevoColor) {
-        jPanel1.setBackground(nuevoColor);
-        btnLogin.setBackground(nuevoColor.darker());
-        btnRegresar.setBackground(nuevoColor.darker());
     }
 
     @SuppressWarnings("unchecked")
@@ -152,163 +145,165 @@ public class Ventana_InicioSesionUser extends javax.swing.JFrame implements util
 
     private void initComponentsCustomizado() {
 
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        txtContraseña = new javax.swing.JTextField();
-        txtUsuario = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        btnRegresar = new javax.swing.JButton();
-        btnLogin = new javax.swing.JButton();
+    jToggleButton1 = new javax.swing.JToggleButton();
+    jPanel1 = new javax.swing.JPanel();
+    jLabel1 = new javax.swing.JLabel();
+    txtContraseña = new javax.swing.JTextField();
+    txtUsuario = new javax.swing.JTextField();
+    jLabel3 = new javax.swing.JLabel();
+    btnRegresar = new javax.swing.JButton();
+    btnLogin = new javax.swing.JButton();
 
-        jToggleButton1.setText("jToggleButton1");
+    jToggleButton1.setText("jToggleButton1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Ventana Inicio de Sesion");
+    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("Ventana Inicio de Sesion");
 
-        jPanel1.setBackground(new java.awt.Color(250, 218, 221));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)),
-                ".........................Inicio de Sesion.........................",
-                javax.swing.border.TitledBorder.CENTER,
-                javax.swing.border.TitledBorder.ABOVE_TOP,
-                new java.awt.Font("Gabriola", 0, 36),
-                new java.awt.Color(0, 0, 0)
-        ));
+    jPanel1.setBackground(new java.awt.Color(250, 218, 221));
+    jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)),
+            ".........................Inicio de Sesion.........................",
+            javax.swing.border.TitledBorder.CENTER,
+            javax.swing.border.TitledBorder.ABOVE_TOP,
+            new java.awt.Font("Gabriola", 0, 36),
+            new java.awt.Color(0, 0, 0)
+    ));
 
-        jLabel1.setFont(new java.awt.Font("Verdana", 1, 14));
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Usuario");
+    
+    jLabel1.setFont(new java.awt.Font("Verdana", 1, 14));
+    jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+    jLabel1.setText("Usuario");
 
-        txtUsuario.setBackground(new java.awt.Color(255, 248, 240));
-        txtUsuario.setPreferredSize(new java.awt.Dimension(220, 34));
+    txtUsuario.setBackground(new java.awt.Color(255, 248, 240));
+    txtUsuario.setPreferredSize(new java.awt.Dimension(220, 34));
 
-        jLabel3.setFont(new java.awt.Font("Verdana", 1, 14));
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Contraseña");
+    jLabel3.setFont(new java.awt.Font("Verdana", 1, 14));
+    jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+    jLabel3.setText("Contraseña");
 
-        txtContraseña.setBackground(new java.awt.Color(255, 248, 240));
-        txtContraseña.setPreferredSize(new java.awt.Dimension(220, 34));
+    txtContraseña.setBackground(new java.awt.Color(255, 248, 240));
+    txtContraseña.setPreferredSize(new java.awt.Dimension(220, 34));
 
-        // --- Botones ---
-        btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
-        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setText("REGRESAR");
-        btnRegresar.setPreferredSize(new java.awt.Dimension(140, 40));
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
+    // --- Botones ---
+    btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
+    btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+    btnRegresar.setText("REGRESAR");
+    btnRegresar.setPreferredSize(new java.awt.Dimension(140, 40));
+    btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnRegresarActionPerformed(evt);
+        }
+    });
 
-        btnLogin.setBackground(new java.awt.Color(232, 74, 95));
-        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogin.setText("LOGIN");
-        btnLogin.setPreferredSize(new java.awt.Dimension(140, 40));
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
-
-        jPanel1.setLayout(new java.awt.GridBagLayout());
-        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = java.awt.GridBagConstraints.RELATIVE;
-        gbc.anchor = java.awt.GridBagConstraints.CENTER;
-        gbc.insets = new java.awt.Insets(15, 100, 15, 15);
-
-        jPanel1.add(jLabel1, gbc);
-        jPanel1.add(txtUsuario, gbc);
-        jPanel1.add(jLabel3, gbc);
-        jPanel1.add(txtContraseña, gbc);
-
-        JPanel panelBotones = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 40, 10));
-        panelBotones.setOpaque(false);
-        panelBotones.add(btnRegresar);
-        panelBotones.add(btnLogin);
-
-        jPanel1.add(panelBotones, gbc);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        pack();
-    }
+    btnLogin.setBackground(new java.awt.Color(232, 74, 95));
+    btnLogin.setForeground(new java.awt.Color(255, 255, 255));
+    btnLogin.setText("LOGIN");
+    btnLogin.setPreferredSize(new java.awt.Dimension(140, 40));
+    btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnLoginActionPerformed(evt);
+        }
+    });
 
 
+    jPanel1.setLayout(new java.awt.GridBagLayout());
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+    gbc.gridx = 0;
+    gbc.gridy = java.awt.GridBagConstraints.RELATIVE;
+    gbc.anchor = java.awt.GridBagConstraints.CENTER;
+    gbc.insets = new java.awt.Insets(15, 100, 15, 15); 
+
+    jPanel1.add(jLabel1, gbc);
+    jPanel1.add(txtUsuario, gbc);
+    jPanel1.add(jLabel3, gbc);
+    jPanel1.add(txtContraseña, gbc);
+
+  
+    JPanel panelBotones = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 40, 10));
+    panelBotones.setOpaque(false); 
+    panelBotones.add(btnRegresar);
+    panelBotones.add(btnLogin);
+
+    jPanel1.add(panelBotones, gbc);
+
+   
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+
+    pack();
+}
+
+    
+    
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        VentanaInicioUsuarios ventana = new VentanaInicioUsuarios();
+        VentanaInicioUsuarios ventana= new VentanaInicioUsuarios();
         ventana.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        String usuario = txtUsuario.getText();
-        String contraseña = txtContraseña.getText();
+        String usuario= txtUsuario.getText();
+        String contraseña= txtContraseña.getText();
+         
+         if (usuario.isEmpty() || contraseña.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "ingrese datos");
+        return;
+    }
+         Usuario usu=new Usuario();
+         usu.setUsuario(usuario);
+         usu.setContraseña(contraseña);
+          try {
+      
+        Response<Usuario> response = apiService.login(usu).execute();
 
-        if (usuario.isEmpty() || contraseña.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "ingrese datos");
-            return;
-        }
-        Usuario usu = new Usuario();
-        usu.setUsuario(usuario);
-        usu.setContraseña(contraseña);
-        try {
-
-            Response<Usuario> response = apiService.login(usu).execute();
-
-            if (response.isSuccessful() && response.body() != null) {
-                Usuario usuarioLogueado = response.body();
-                JOptionPane.showMessageDialog(this,
-                        "Bienvenido " + usuarioLogueado.getNombre()
-                        + " (" + usuarioLogueado.getRol() + ")");
-
-                Rol rol = usuarioLogueado.getRol();
-                String ClienteDoc = usuarioLogueado.getDocumento();
-                switch (rol) {
-                    case CLIENTE -> {
-                        VentanaDeCombos ventanaCliente = new VentanaDeCombos(rol, ClienteDoc);
-                        ventanaCliente.setVisible(true);
-                    }
-
-                    case MESERO -> {
-                        VentanaMatrizCamarero ventanaCamarero = new VentanaMatrizCamarero(rol, ClienteDoc);
-                        ventanaCamarero.setVisible(true);
-                        this.setVisible(false);
-                    }
-
-                    case ADMIN -> {
-                        VentanaAdminCombos ventanaAdmin = new VentanaAdminCombos(rol, ClienteDoc);
-                        ventanaAdmin.setVisible(true);
-                    }
-
-                    default -> {
-                        JOptionPane.showMessageDialog(this, "Rol no reconocido: " + rol);
-                        return;
-                    }
-                }
-                this.setVisible(false);
-            } else if (response.code() == 401) {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + response.code());
+        if (response.isSuccessful() && response.body() != null) {
+            Usuario usuarioLogueado = response.body();
+            JOptionPane.showMessageDialog(this, 
+                "Bienvenido " + usuarioLogueado.getNombre() + 
+                " (" + usuarioLogueado.getRol() + ")");
+            
+            Rol rol= usuarioLogueado.getRol();
+            String ClienteDoc = usuarioLogueado.getDocumento();
+           switch (rol) {
+            case CLIENTE -> {
+                VentanaDeCombos ventanaCliente = new VentanaDeCombos(rol, ClienteDoc);
+                ventanaCliente.setVisible(true);
             }
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error de conexión con el servidor");
-            e.printStackTrace();
-        }
 
+            case MESERO -> {
+                VentanaMatrizCamarero ventanaCamarero = new VentanaMatrizCamarero(rol, ClienteDoc);
+                ventanaCamarero.setVisible(true);
+            }
+
+            default -> {
+                JOptionPane.showMessageDialog(this, "Rol no reconocido: " + rol);
+                return;
+            }
+        }
+            this.setVisible(false);
+        } else if (response.code() == 401) {
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + response.code());
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error de conexión con el servidor");
+        e.printStackTrace();
+    }
+       
+        
+       
+      
 
     }//GEN-LAST:event_btnLoginActionPerformed
 

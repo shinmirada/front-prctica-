@@ -1,6 +1,9 @@
 package vistas;
 
+
 import java.awt.Color;
+import javax.swing.Box;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -8,7 +11,8 @@ import javax.swing.JPanel;
  *
  * @author MI PC
  */
-public class VentanaInicioUsuarios extends javax.swing.JFrame implements util.ActualizaTemaVentanas {
+public class VentanaInicioUsuarios extends javax.swing.JFrame {
+
 
     private VentanaRegistro vRegistro;
 
@@ -18,13 +22,7 @@ public class VentanaInicioUsuarios extends javax.swing.JFrame implements util.Ac
         this.setLocationRelativeTo(null);
         setTitle("¡Hola que deseas hacer hoy!");
 
-        // Registrar esta ventana en el manejador de temas
-        util.TemaVisual.registrarVentana(this);
-
-        // Aplicar el color actual al iniciar
-        aplicarColor(util.TemaVisual.getColorFondo());
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         // ---------- BARRA DE PROGRESO EN HILO SEPARADO ----------
         new Thread(() -> {
             for (int i = 0; i <= 100; i++) {
@@ -40,15 +38,7 @@ public class VentanaInicioUsuarios extends javax.swing.JFrame implements util.Ac
             }
             // Lanza el hilo
         }).start();
-    }
 
-    @Override
-    public void aplicarColor(Color nuevoColor) {
-        panelBienvenida.setBackground(nuevoColor);
-        btnCambiarColor.setBackground(nuevoColor.darker());
-        btnLogin.setBackground(nuevoColor.darker());
-        btnRegistro.setBackground(nuevoColor.darker());
-        btnRegresar.setBackground(nuevoColor.darker());
     }
 
     @SuppressWarnings("unchecked")
@@ -192,162 +182,171 @@ public class VentanaInicioUsuarios extends javax.swing.JFrame implements util.Ac
 
     private void initComponentsCustomizado() {
 
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        panelBienvenida = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        btnCambiarColor = new javax.swing.JButton();
-        jProgressBar = new javax.swing.JProgressBar();
-        btnLogin = new javax.swing.JButton();
-        btnRegistro = new javax.swing.JButton();
-        btnRegresar = new javax.swing.JButton();
+    jMenu1 = new javax.swing.JMenu();
+    jMenu2 = new javax.swing.JMenu();
+    jMenuItem1 = new javax.swing.JMenuItem();
+    jMenuItem2 = new javax.swing.JMenuItem();
+    jMenuItem3 = new javax.swing.JMenuItem();
+    panelBienvenida = new javax.swing.JPanel();
+    jLabel1 = new javax.swing.JLabel();
+    btnCambiarColor = new javax.swing.JButton();
+    jProgressBar = new javax.swing.JProgressBar();
+    btnLogin = new javax.swing.JButton();
+    btnRegistro = new javax.swing.JButton();
+    btnRegresar = new javax.swing.JButton();
 
-        jMenu1.setText("jMenu1");
-        jMenu2.setText("jMenu2");
-        jMenuItem1.setText("jMenuItem1");
-        jMenuItem2.setText("jMenuItem2");
-        jMenuItem3.setText("jMenuItem3");
+    jMenu1.setText("jMenu1");
+    jMenu2.setText("jMenu2");
+    jMenuItem1.setText("jMenuItem1");
+    jMenuItem2.setText("jMenuItem2");
+    jMenuItem3.setText("jMenuItem3");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("¡Hola que deseas hacer hoy!");
+    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("¡Hola que deseas hacer hoy!");
 
-        panelBienvenida.setBackground(new java.awt.Color(250, 218, 221));
-        panelBienvenida.setBorder(javax.swing.BorderFactory.createTitledBorder(
-                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)),
-                ".........................Restaurante Usugi-Dono.........................",
-                javax.swing.border.TitledBorder.CENTER,
-                javax.swing.border.TitledBorder.ABOVE_TOP,
-                new java.awt.Font("Gabriola", 0, 36),
-                new java.awt.Color(0, 0, 0)
-        ));
-        panelBienvenida.setLayout(new java.awt.GridBagLayout());
-        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+  
+    panelBienvenida.setBackground(new java.awt.Color(250, 218, 221));
+    panelBienvenida.setBorder(javax.swing.BorderFactory.createTitledBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(139, 94, 60)),
+            ".........................Restaurante Usugi-Dono.........................",
+            javax.swing.border.TitledBorder.CENTER,
+            javax.swing.border.TitledBorder.ABOVE_TOP,
+            new java.awt.Font("Gabriola", 0, 36),
+            new java.awt.Color(0, 0, 0)
+    ));
+    panelBienvenida.setLayout(new java.awt.GridBagLayout());
+    java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
 
-        jLabel1.setFont(new java.awt.Font("Elephant", 0, 18));
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("¿Qué desea Hacer?");
+  
+    jLabel1.setFont(new java.awt.Font("Elephant", 0, 18));
+    jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+    jLabel1.setText("¿Qué desea Hacer?");
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.insets = new java.awt.Insets(30, 0, 30, 0);
-        gbc.anchor = java.awt.GridBagConstraints.CENTER;
-        panelBienvenida.add(jLabel1, gbc);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.weightx = 1.0;
+    gbc.insets = new java.awt.Insets(30, 0, 30, 0);
+    gbc.anchor = java.awt.GridBagConstraints.CENTER;
+    panelBienvenida.add(jLabel1, gbc);
 
-        btnLogin.setBackground(new java.awt.Color(232, 74, 95));
-        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        btnLogin.setText("Iniciar Sesión");
-        btnLogin.setPreferredSize(new java.awt.Dimension(150, 40));
-        btnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLoginActionPerformed(evt);
-            }
-        });
+    
+    btnLogin.setBackground(new java.awt.Color(232, 74, 95));
+    btnLogin.setForeground(new java.awt.Color(255, 255, 255));
+    btnLogin.setText("Iniciar Sesión");
+    btnLogin.setPreferredSize(new java.awt.Dimension(150, 40));
+    btnLogin.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnLoginActionPerformed(evt);
+        }
+    });
 
-        btnRegistro.setBackground(new java.awt.Color(232, 74, 95));
-        btnRegistro.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistro.setText("Registrarse");
-        btnRegistro.setPreferredSize(new java.awt.Dimension(150, 40));
-        btnRegistro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistroActionPerformed(evt);
-            }
-        });
+    btnRegistro.setBackground(new java.awt.Color(232, 74, 95));
+    btnRegistro.setForeground(new java.awt.Color(255, 255, 255));
+    btnRegistro.setText("Registrarse");
+    btnRegistro.setPreferredSize(new java.awt.Dimension(150, 40));
+    btnRegistro.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnRegistroActionPerformed(evt);
+        }
+    });
 
-        btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
-        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setText("Regresar");
-        btnRegresar.setPreferredSize(new java.awt.Dimension(150, 40));
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
+    btnRegresar.setBackground(new java.awt.Color(232, 74, 95));
+    btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
+    btnRegresar.setText("Regresar");
+    btnRegresar.setPreferredSize(new java.awt.Dimension(150, 40));
+    btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnRegresarActionPerformed(evt);
+        }
+    });
 
-        JPanel panelBotones = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 20));
-        panelBotones.setOpaque(false);
-        panelBotones.add(btnLogin);
-        panelBotones.add(btnRegistro);
-        panelBotones.add(btnRegresar);
+    JPanel panelBotones = new JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 20));
+    panelBotones.setOpaque(false);
+    panelBotones.add(btnLogin);
+    panelBotones.add(btnRegistro);
+    panelBotones.add(btnRegresar);
 
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        gbc.anchor = java.awt.GridBagConstraints.NORTH;
-        panelBienvenida.add(panelBotones, gbc);
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    gbc.weightx = 1.0;
+    gbc.weighty = 1.0;
+    gbc.anchor = java.awt.GridBagConstraints.NORTH;
+    panelBienvenida.add(panelBotones, gbc);
 
-        btnCambiarColor.setBackground(new java.awt.Color(232, 74, 95));
-        btnCambiarColor.setForeground(new java.awt.Color(255, 255, 255));
-        btnCambiarColor.setText("Cambiar a modo oscuro");
-        btnCambiarColor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCambiarColorActionPerformed(evt);
-            }
-        });
+    
+    btnCambiarColor.setBackground(new java.awt.Color(232, 74, 95));
+    btnCambiarColor.setForeground(new java.awt.Color(255, 255, 255));
+    btnCambiarColor.setText("Cambiar a modo oscuro");
+    btnCambiarColor.addActionListener(new java.awt.event.ActionListener() {
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            btnCambiarColorActionPerformed(evt);
+        }
+    });
 
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.0;
-        gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gbc.insets = new java.awt.Insets(10, 20, 5, 20);
-        panelBienvenida.add(btnCambiarColor, gbc);
+    gbc.gridx = 0;
+    gbc.gridy = 2;
+    gbc.weightx = 1.0;
+    gbc.weighty = 0.0;
+    gbc.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+    gbc.insets = new java.awt.Insets(10, 20, 5, 20);
+    panelBienvenida.add(btnCambiarColor, gbc);
 
-        jProgressBar.setBackground(new java.awt.Color(168, 198, 134));
-        jProgressBar.setForeground(new java.awt.Color(200, 200, 200));
-        jProgressBar.setStringPainted(true);
+   
+    jProgressBar.setBackground(new java.awt.Color(168, 198, 134));
+    jProgressBar.setForeground(new java.awt.Color(200, 200, 200));
+    jProgressBar.setStringPainted(true);
 
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.weightx = 1.0;
-        gbc.weighty = 0.0;
-        gbc.anchor = java.awt.GridBagConstraints.SOUTH;
-        gbc.insets = new java.awt.Insets(0, 20, 20, 20);
-        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        panelBienvenida.add(jProgressBar, gbc);
+    gbc.gridx = 0;
+    gbc.gridy = 3;
+    gbc.weightx = 1.0;
+    gbc.weighty = 0.0;
+    gbc.anchor = java.awt.GridBagConstraints.SOUTH;
+    gbc.insets = new java.awt.Insets(0, 20, 20, 20);
+    gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    panelBienvenida.add(jProgressBar, gbc);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(panelBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(panelBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+    
+    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    getContentPane().setLayout(layout);
+    layout.setHorizontalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
+    layout.setVerticalGroup(
+        layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+    );
 
-        pack();
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-    }
+    pack();
+    setExtendedState(JFrame.MAXIMIZED_BOTH); 
+}
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        Ventana_InicioSesionUser ventana = new Ventana_InicioSesionUser();
-        ventana.setVisible(true);
+       Ventana_InicioSesionUser ventana= new Ventana_InicioSesionUser();
+       ventana.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
-        vRegistro = new VentanaRegistro();
-        vRegistro.setVisible(true);
+       vRegistro= new VentanaRegistro();
+       vRegistro.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegistroActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        VentanaPrincipal ventana = new VentanaPrincipal();
-        ventana.setVisible(true);
+       VentanaPrincipal ventana= new VentanaPrincipal();
+       ventana.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void btnCambiarColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarColorActionPerformed
-        Color nuevoColor = javax.swing.JColorChooser.showDialog(this, "Selecciona un color", util.TemaVisual.getColorFondo());
+        Color nuevoColor = JColorChooser.showDialog(this, "Selecciona un color", panelBienvenida.getBackground());
         if (nuevoColor != null) {
-            util.TemaVisual.cambiarColor(nuevoColor);
+            panelBienvenida.setBackground(nuevoColor); // cambia color en ventana1
+            if (vRegistro != null) {
+                vRegistro.cambiarColorPanel(nuevoColor); // cambia color en ventana2
+            }
         }
     }//GEN-LAST:event_btnCambiarColorActionPerformed
 
@@ -366,5 +365,4 @@ public class VentanaInicioUsuarios extends javax.swing.JFrame implements util.Ac
     private javax.swing.JProgressBar jProgressBar;
     private javax.swing.JPanel panelBienvenida;
     // End of variables declaration//GEN-END:variables
-
 }
