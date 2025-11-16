@@ -12,12 +12,16 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import modelo.ItemPedidoDTO;
 import modelo.Pedido;
+import modelo.PedidoRequestDTO;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import util.RetrofitClient;
@@ -297,23 +301,26 @@ private void estilizarBoton(javax.swing.JButton boton) {
     private void btnRestauranteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestauranteActionPerformed
         // TODO add your handling code here:
 
-        String seleccionado = comboPlatos.getSelectedItem().toString();
-
+    	String seleccionado = comboPlatos.getSelectedItem().toString();
         int idPlato = Integer.parseInt(seleccionado.split(" - ")[0].trim());
 
-        Pedido pedido = new Pedido();
-        pedido.setIdPlato(idPlato);
-        pedido.setEsDomicilio(false);
-        pedido.setClienteDoc(ClienteDoc);
+        // ✅ Crear el DTO correctamente
+        PedidoRequestDTO pedidoRequest = new PedidoRequestDTO();
+        pedidoRequest.setClienteDoc(ClienteDoc);
+        pedidoRequest.setEsDomicilio(false);
+        
+        // ✅ Crear lista con UN solo item
+        List<ItemPedidoDTO> items = new ArrayList<>();
+        items.add(new ItemPedidoDTO(idPlato, 1)); // 1 plato, cantidad 1
+        pedidoRequest.setItems(items);
 
         try {
-
-            Response<Pedido> response = apiService.createPedido(pedido).execute();
+            Response<Pedido> response = apiService.createPedido(pedidoRequest).execute();
 
             if (response.isSuccessful() && response.body() != null) {
                 Pedido creado = response.body();
                 JOptionPane.showMessageDialog(this,
-                        " Pedido creado correctamente\n"
+                        "✅ Pedido creado correctamente\n"
                         + "ID Pedido: " + creado.getId() + "\n"
                         + "Plato: " + seleccionado + "\n"
                         + "Modalidad: Restaurante");
@@ -323,40 +330,38 @@ private void estilizarBoton(javax.swing.JButton boton) {
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "️ Error al crear el pedido. Código HTTP: " + response.code());
+                        "⚠️ Error al crear el pedido. Código HTTP: " + response.code());
             }
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    " Error de conexión con el servidor");
+                    "❌ Error de conexión con el servidor");
             e.printStackTrace();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "️ Error inesperado: " + e.getMessage());
         }
-
-
-    }//GEN-LAST:event_btnRestauranteActionPerformed
+    }
 
     private void btnDomicilioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDomicilioActionPerformed
         // TODO add your handling code here:
-         String seleccionado = comboPlatos.getSelectedItem().toString();
-
+    	String seleccionado = comboPlatos.getSelectedItem().toString();
         int idPlato = Integer.parseInt(seleccionado.split(" - ")[0].trim());
 
-        Pedido pedido = new Pedido();
-        pedido.setIdPlato(idPlato);
-        pedido.setEsDomicilio(true);
-        pedido.setClienteDoc(ClienteDoc);
+        // ✅ Crear el DTO correctamente
+        PedidoRequestDTO pedidoRequest = new PedidoRequestDTO();
+        pedidoRequest.setClienteDoc(ClienteDoc);
+        pedidoRequest.setEsDomicilio(true);
+        
+        // ✅ Crear lista con UN solo item
+        List<ItemPedidoDTO> items = new ArrayList<>();
+        items.add(new ItemPedidoDTO(idPlato, 1)); // 1 plato, cantidad 1
+        pedidoRequest.setItems(items);
 
         try {
-
-            Response<Pedido> response = apiService.createPedido(pedido).execute();
+            Response<Pedido> response = apiService.createPedido(pedidoRequest).execute();
 
             if (response.isSuccessful() && response.body() != null) {
                 Pedido creado = response.body();
                 JOptionPane.showMessageDialog(this,
-                        " Pedido creado correctamente\n"
+                        "✅ Pedido creado correctamente\n"
                         + "ID Pedido: " + creado.getId() + "\n"
                         + "Plato: " + seleccionado + "\n"
                         + "Modalidad: Domicilio");
@@ -366,20 +371,15 @@ private void estilizarBoton(javax.swing.JButton boton) {
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(this,
-                        "️ Error al crear el pedido. Código HTTP: " + response.code());
+                        "⚠️ Error al crear el pedido. Código HTTP: " + response.code());
             }
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this,
-                    " Error de conexión con el servidor");
+                    "❌ Error de conexión con el servidor");
             e.printStackTrace();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "️ Error inesperado: " + e.getMessage());
         }
-
-    }//GEN-LAST:event_btnDomicilioActionPerformed
-
+    }
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
        VentanaDeCombos ventana=new VentanaDeCombos(rolUsuario, ClienteDoc);
@@ -387,7 +387,7 @@ private void estilizarBoton(javax.swing.JButton boton) {
         this.setVisible(false);
 
 
-    }//GEN-LAST:event_btnRegresarActionPerformed
+    }
 
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

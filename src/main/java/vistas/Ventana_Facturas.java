@@ -1,235 +1,175 @@
 package vistas;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import apiService.FacturaApiService;
 import enums.Rol;
 import modelo.Factura;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import util.RetrofitClient;
 
 public class Ventana_Facturas extends javax.swing.JFrame {
 
-    private Rol rolUsuario;
     private String clienteDoc;
     private FacturaApiService apiService;
-    private javax.swing.JTextField txtDocumento;
     private javax.swing.JTextField txtPedidoId;
-    private javax.swing.JButton btnAccion;
+    private Rol rolUsuario;
 
-    public Ventana_Facturas(Rol rolUsuario, String clienteDoc) {
-        this.rolUsuario = rolUsuario;
+    public Ventana_Facturas( Rol rolUsuario, String clienteDoc) {
         this.clienteDoc = clienteDoc;
+        this.rolUsuario= rolUsuario;
 
         initComponents();  
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
         Retrofit retrofit = RetrofitClient.getClient();
         apiService = retrofit.create(FacturaApiService.class);
 
-        configurarVentanaPorRol();
+        configurarVentana();
     }
 
-    private void configurarVentanaPorRol() {
-    
+    private void configurarVentana() {
         jPanelVerde.removeAll();
         jPanelVerde.setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
-        gbc.insets = new java.awt.Insets(8, 8, 8, 8);
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
 
-        javax.swing.JLabel lblDoc = new javax.swing.JLabel("Documento del Cliente:");
-        lblDoc.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+        // Título
+        javax.swing.JLabel lblTitulo = new javax.swing.JLabel("Mis Facturas");
+        lblTitulo.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 0;
-        jPanelVerde.add(lblDoc, gbc);
+        gbc.gridwidth = 4;
+        gbc.anchor = java.awt.GridBagConstraints.CENTER;
+        jPanelVerde.add(lblTitulo, gbc);
 
-        txtDocumento = new javax.swing.JTextField(15);
-        txtDocumento.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 14));
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        jPanelVerde.add(txtDocumento, gbc);
-
-        javax.swing.JLabel lblPedido = new javax.swing.JLabel("ID Pedido:");
-        lblPedido.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
-        gbc.gridx = 0;
+        // Campo de búsqueda
+        gbc.gridwidth = 1;
         gbc.gridy = 1;
-        jPanelVerde.add(lblPedido, gbc);
+        gbc.anchor = java.awt.GridBagConstraints.WEST;
+
+        javax.swing.JLabel lblBuscar = new javax.swing.JLabel("Buscar por ID Pedido:");
+        lblBuscar.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+        gbc.gridx = 0;
+        jPanelVerde.add(lblBuscar, gbc);
 
         txtPedidoId = new javax.swing.JTextField(15);
         txtPedidoId.setFont(new java.awt.Font("Dialog", java.awt.Font.PLAIN, 14));
         gbc.gridx = 1;
-        gbc.gridy = 1;
         jPanelVerde.add(txtPedidoId, gbc);
 
-        btnAccion = new javax.swing.JButton();
-        btnAccion.setBackground(new java.awt.Color(232, 74, 95));
-        btnAccion.setForeground(java.awt.Color.WHITE);
-        btnAccion.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        gbc.gridwidth = 2;
-        jPanelVerde.add(btnAccion, gbc);
+        // Botón Buscar
+        javax.swing.JButton btnBuscar = new javax.swing.JButton("Buscar");
+        btnBuscar.setBackground(new java.awt.Color(232, 74, 95));
+        btnBuscar.setForeground(java.awt.Color.WHITE);
+        btnBuscar.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+        btnBuscar.addActionListener(e -> filtrarPorPedido());
+        gbc.gridx = 2;
+        jPanelVerde.add(btnBuscar, gbc);
 
-       
-        if (rolUsuario == Rol.CLIENTE) {
-            btnAccion.setText("Consultar Mis Facturas");
-            txtDocumento.setText(clienteDoc);           
-            txtDocumento.setEditable(false);          
-            txtPedidoId.setEditable(false);           
-            btnAccion.addActionListener(e -> consultarFacturasCliente());
-
-           
-            if (jTabbedPane1.getTabCount() > 0) {
-                jTabbedPane1.setEnabledAt(0, false);
-                jTabbedPane1.setSelectedIndex(1);  
-            }
-
-       
-            consultarFacturasCliente();
-        } else {
-            btnAccion.setText("Registrar Factura");
-            txtDocumento.setText("");
-            txtDocumento.setEditable(true);
-            txtPedidoId.setEditable(true);
-            btnAccion.addActionListener(e -> generarFactura());
-
-    
-            if (jTabbedPane1.getTabCount() > 0) {
-                jTabbedPane1.setEnabledAt(0, true);
-            }
-            cargarTodasFacturas();
-        }
+        // Botón Mostrar Todas
+        javax.swing.JButton btnMostrarTodas = new javax.swing.JButton("Mostrar Todas");
+        btnMostrarTodas.setBackground(new java.awt.Color(168, 198, 134));
+        btnMostrarTodas.setFont(new java.awt.Font("Dialog", java.awt.Font.BOLD, 14));
+        btnMostrarTodas.addActionListener(e -> cargarMisFacturas());
+        gbc.gridx = 3;
+        jPanelVerde.add(btnMostrarTodas, gbc);
 
         jPanelVerde.revalidate();
         jPanelVerde.repaint();
+
+        // Cargar facturas del cliente al abrir la ventana
+        cargarMisFacturas();
     }
 
-    private void consultarFacturasCliente() {
-        final String doc = this.clienteDoc; 
-
-        javax.swing.SwingWorker<java.util.List<Factura>, Void> worker = new javax.swing.SwingWorker<>() {
+    private void cargarMisFacturas() {
+        javax.swing.SwingWorker<List<Factura>, Void> worker = new javax.swing.SwingWorker<>() {
             @Override
-            protected java.util.List<Factura> doInBackground() throws Exception {
-                retrofit2.Response<java.util.List<Factura>> response = apiService.getFacturasByUsuario(doc).execute();
+            protected List<Factura> doInBackground() throws Exception {
+                Response<List<Factura>> response = apiService.getFacturasByUsuario(clienteDoc).execute();
                 if (response.isSuccessful()) {
                     return response.body();
                 } else {
-                    throw new java.io.IOException("Error HTTP: " + response.code());
+                    throw new IOException("Error HTTP: " + response.code());
                 }
             }
 
             @Override
             protected void done() {
                 try {
-                    java.util.List<Factura> facturas = get();
+                    List<Factura> facturas = get();
                     if (facturas == null || facturas.isEmpty()) {
                         mostrarFacturasEnTabla(java.util.Collections.emptyList());
-                        javax.swing.JOptionPane.showMessageDialog(Ventana_Facturas.this, "No se encontraron facturas para este cliente.");
+                        JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                            "No tienes facturas registradas aún.");
                     } else {
                         mostrarFacturasEnTabla(facturas);
-                        jTabbedPane1.setSelectedIndex(1);
                     }
+                    txtPedidoId.setText(""); // Limpiar campo de búsqueda
                 } catch (Exception ex) {
-                    javax.swing.JOptionPane.showMessageDialog(Ventana_Facturas.this, "Error al consultar facturas: " + ex.getMessage());
+                    JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                        "Error al cargar tus facturas: " + ex.getMessage());
                 }
             }
         };
         worker.execute();
     }
-
-    private void cargarTodasFacturas() {
-        javax.swing.SwingWorker<java.util.List<Factura>, Void> worker = new javax.swing.SwingWorker<>() {
-            @Override
-            protected java.util.List<Factura> doInBackground() throws Exception {
-                retrofit2.Response<java.util.List<Factura>> response = apiService.getAllFacturas().execute();
-                if (response.isSuccessful()) {
-                    return response.body();
-                } else {
-                    throw new java.io.IOException("Error HTTP: " + response.code());
-                }
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    java.util.List<Factura> facturas = get();
-                    mostrarFacturasEnTabla(facturas);
-                } catch (Exception ex) {
-                    javax.swing.JOptionPane.showMessageDialog(Ventana_Facturas.this, "Error al cargar facturas: " + ex.getMessage());
-                }
-            }
-        };
-        worker.execute();
-    }
-
-    private void generarFactura() {
-        String documentoCliente = txtDocumento.getText().trim();
+    private void filtrarPorPedido() {
         String pedidoIdStr = txtPedidoId.getText().trim();
-        if (documentoCliente.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese el documento del cliente.");
-            return;
-        }
+        
         if (pedidoIdStr.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor ingrese el ID del pedido.");
+            JOptionPane.showMessageDialog(this, "Por favor ingrese un ID de pedido");
             return;
         }
-        int pedidoId;
+
         try {
-            pedidoId = Integer.parseInt(pedidoIdStr);
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "El ID del pedido debe ser numérico.");
-            return;
-        }
-
-        Factura factura = new Factura();
-        factura.setUsuarioDoc(documentoCliente);
-        factura.setPedidoId(pedidoId);
-        factura.setHora(java.time.LocalDateTime.now().toString());
-
-        javax.swing.SwingWorker<Factura, Void> worker = new javax.swing.SwingWorker<>() {
-            @Override
-            protected Factura doInBackground() throws Exception {
-                retrofit2.Call<Factura> call = apiService.createFactura(factura);
-                retrofit2.Response<Factura> response = call.execute();
-                if (response.isSuccessful()) {
-                    return response.body();
-                } else {
-                    throw new java.io.IOException("Error HTTP: " + response.code());
-                }
-            }
-
-            @Override
-            protected void done() {
-                try {
-                    Factura f = get();
-                    javax.swing.JOptionPane.showMessageDialog(Ventana_Facturas.this, "Factura generada correctamente para el pedido #" + pedidoId);
-                    cargarTodasFacturas();
-                    jTabbedPane1.setSelectedIndex(1);
-                    txtPedidoId.setText("");
-                    txtDocumento.setText("");
-                } catch (Exception ex) {
-                    String msg = ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage();
-                    if (msg != null && msg.contains("Error HTTP: 409")) {
-                        javax.swing.JOptionPane.showMessageDialog(Ventana_Facturas.this, "Ya existe una factura para este pedido.");
+            int pedidoId = Integer.parseInt(pedidoIdStr);
+            
+            javax.swing.SwingWorker<Factura, Void> worker = new javax.swing.SwingWorker<>() {
+                @Override
+                protected Factura doInBackground() throws Exception {
+                    // ✅ CORREGIDO: Usar el método correcto
+                    Response<Factura> response = apiService.getFacturaByPedidoYUsuario(pedidoId, clienteDoc).execute();
+                    if (response.isSuccessful()) {
+                        return response.body();
+                    } else if (response.code() == 404) {
+                        return null;
                     } else {
-                        javax.swing.JOptionPane.showMessageDialog(Ventana_Facturas.this, "Error al generar factura: " + msg);
+                        throw new IOException("Error HTTP: " + response.code());
                     }
                 }
-            }
-        };
-        worker.execute();
+
+                @Override
+                protected void done() {
+                    try {
+                        Factura factura = get();
+                        if (factura == null) {
+                            mostrarFacturasEnTabla(java.util.Collections.emptyList());
+                            JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                                "No se encontró factura para el pedido #" + pedidoId);
+                        } else {
+                            mostrarFacturasEnTabla(List.of(factura));
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                            "Error al buscar factura: " + ex.getMessage());
+                    }
+                }
+            };
+            worker.execute();
+            
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El ID del pedido debe ser numérico");
+        }
     }
 
-    private void mostrarFacturasEnTabla(java.util.List<Factura> facturas) {
-        String[] cols = {"Código", "Fecha", "Cliente", "PedidoID", "Valor"};
+    private void mostrarFacturasEnTabla(List<Factura> facturas) {
+        String[] cols = {"ID", "Fecha", "Pedido ID", "Total"};
         javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -240,17 +180,16 @@ public class Ventana_Facturas extends javax.swing.JFrame {
         if (facturas != null) {
             for (Factura f : facturas) {
                 model.addRow(new Object[]{
-                    f.getCodigo(),
-                    f.getHora(),
-                    f.getUsuarioDoc(),
-                    f.getPedidoId(),
-                    f.getValor()
+                    f.getFacturaid(),           // ✅ Ahora es Long id
+                    f.getFecha(),        // ✅ LocalDateTime fecha
+                    f.getPedidoId(),  // ✅ Obtener ID del pedido
+                    "$" + String.format("%.2f", f.getTotal())  // ✅ BigDecimal total
                 });
             }
         }
         tlbFactura.setModel(model);
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -410,25 +349,17 @@ public class Ventana_Facturas extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-          
-    this.setVisible(false);
+    }
 
     
-    if (rolUsuario == Rol.MESERO) {
-        VentanaMatrizCamarero ventana = new VentanaMatrizCamarero(rolUsuario, clienteDoc);
-        ventana.setVisible(true);
-    } else if (rolUsuario == Rol.CLIENTE) {
+    
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {
+    	
+    this.setVisible(false);
         VentanaMisPedidos ventana = new VentanaMisPedidos(rolUsuario, clienteDoc);
         ventana.setVisible(true);
-    } else {
-
-        JOptionPane.showMessageDialog(this, "Rol no reconocido");
-        this.setVisible(true);
+   
     }
-    }//GEN-LAST:event_btnRegresarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

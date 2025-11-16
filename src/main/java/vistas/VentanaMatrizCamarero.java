@@ -3,6 +3,7 @@ package vistas;
 import apiService.PedidoApiService;
 import enums.Estado;
 import enums.Rol;
+import modelo.ItemPedido;
 import modelo.Pedido;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -118,7 +119,10 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
     private void mostrarPedidos(List<Pedido> pedidos) {
         for (Pedido pedido : pedidos) {
-            JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + pedido.getNombrePlato());
+            // ✅ Obtener nombre del plato desde items
+            String nombrePlato = obtenerNombrePlato(pedido);
+            
+            JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + nombrePlato);
             boton.setFont(new Font("Dialog", Font.BOLD, 13));
             boton.setForeground(Color.BLACK);
 
@@ -141,11 +145,26 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
     private void mostrarDetallesPedido(Pedido pedido) {
         JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
-        panel.add(new JLabel("Plato: " + pedido.getNombrePlato()));
-        panel.add(new JLabel("Modalidad: " + (pedido.isEsDomicilio() ? "Domicilio" : "Restaurante")));
-        panel.add(new JLabel("ClienteDoc :" + pedido.getClienteDoc()));
+        
+        // ✅ Mostrar todos los platos
+        panel.add(new JLabel("=== PEDIDO #" + pedido.getId() + " ==="));
+        panel.add(new JLabel(" "));
+        panel.add(new JLabel("Platos:"));
+        
+        if (pedido.getItems() != null && !pedido.getItems().isEmpty()) {
+            for (ItemPedido item : pedido.getItems()) {
+                panel.add(new JLabel("  • " + item.getPlato().getNombre() 
+                        + " x" + item.getCantidad() 
+                        + " ($" + item.getPrecioUnitario() + ")"));
+            }
+        } else {
+            panel.add(new JLabel("  (Sin items)"));
+        }
+        
+        panel.add(new JLabel(" "));
+        panel.add(new JLabel("Modalidad: " + (pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante")));
+        panel.add(new JLabel("Cliente Doc: " + pedido.getClienteDoc()));
         panel.add(new JLabel("Estado actual: " + pedido.getEstado()));
-     
 
         JButton btnActualizar = new JButton("Actualizar Estado");
         btnActualizar.setBackground(VERDE_MECCHA);
@@ -203,6 +222,20 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error al conectar con el servidor: " + e.getMessage());
+        }
+    }
+    
+    private String obtenerNombrePlato(Pedido pedido) {
+        if (pedido.getItems() == null || pedido.getItems().isEmpty()) {
+            return "Sin platos";
+        }
+        
+        if (pedido.getItems().size() == 1) {
+            return pedido.getItems().get(0).getPlato().getNombre();
+        } else {
+            // Múltiples platos
+            return pedido.getItems().get(0).getPlato().getNombre() 
+                    + " (+" + (pedido.getItems().size() - 1) + " más)";
         }
     }
 

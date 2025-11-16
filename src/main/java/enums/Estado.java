@@ -9,7 +9,7 @@ package enums;
  * @author Dilan
  */
 public enum Estado {
-     	PENDIENTE,
+    PENDIENTE,
 	PREPARACION,
 	FINALIZADO 
 }

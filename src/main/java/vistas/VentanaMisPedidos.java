@@ -12,6 +12,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import modelo.ItemPedido;
 
 public class VentanaMisPedidos extends javax.swing.JFrame {
 
@@ -19,6 +20,7 @@ public class VentanaMisPedidos extends javax.swing.JFrame {
     private PedidoApiService apiService;
     private String clienteDoc;
      private Rol rolUsuario;
+     
 
     private static final Color ROSA_PASTEL = new Color(0xF9, 0xC5, 0xD5);
     private static final Color BLANCO_CREMOSO = new Color(0xFF, 0xF8, 0xF0);
@@ -105,27 +107,44 @@ public class VentanaMisPedidos extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error de conexión con el servidor: " + e.getMessage());
         }
     }
-
+    
+    
     private void mostrarPedidos(List<Pedido> pedidos) {
         panelMatriz.removeAll(); 
 
         for (Pedido pedido : pedidos) {
-            JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + pedido.getNombrePlato());
+            // ✅ Obtener nombre del plato desde items
+            String nombrePlato = obtenerNombrePlato(pedido);
+            
+            JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + nombrePlato);
             boton.setBackground(BLANCO_CREMOSO);
-            boton.setForeground(BLANCO_CREMOSO);
+            boton.setForeground(Color.BLACK); // ← Cambiar a negro para que se vea
             boton.setFont(new Font("Dialog", Font.PLAIN, 14));
 
-             if (pedido.isEsDomicilio()) {
+            if (pedido.isEsDomicilio()) {
                 boton.setBackground(ROJO_TORII); 
             } else {
                 boton.setBackground(MARRON_MADERA); 
             }
              
             boton.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this,
-                        "Plato: " + pedido.getNombrePlato() + "\n" +
-                        "Estado: " + pedido.getEstado() + "\n" +
-                        "Modalidad: " + (pedido.isEsDomicilio() ? "Domicilio" : "Restaurante"));
+                StringBuilder detalles = new StringBuilder();
+                detalles.append("=== PEDIDO #").append(pedido.getId()).append(" ===\n\n");
+                
+                if (pedido.getItems() != null && !pedido.getItems().isEmpty()) {
+                    detalles.append("PLATOS:\n");
+                    for (ItemPedido item : pedido.getItems()) {
+                        detalles.append("• ").append(item.getPlato().getNombre())
+                                .append(" x").append(item.getCantidad())
+                                .append(" ($").append(item.getPrecioUnitario()).append(")\n");
+                    }
+                    detalles.append("\n");
+                }
+                
+                detalles.append("Estado: ").append(pedido.getEstado()).append("\n");
+                detalles.append("Modalidad: ").append(pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante");
+                
+                JOptionPane.showMessageDialog(this, detalles.toString());
             });
 
             panelMatriz.add(boton);
@@ -134,6 +153,21 @@ public class VentanaMisPedidos extends javax.swing.JFrame {
         panelMatriz.revalidate();
         panelMatriz.repaint();
     }
+    
+ // ✅ Método auxiliar para obtener nombre del plato
+    private String obtenerNombrePlato(Pedido pedido) {
+        if (pedido.getItems() == null || pedido.getItems().isEmpty()) {
+            return "Sin platos";
+        }
+        
+        if (pedido.getItems().size() == 1) {
+            return pedido.getItems().get(0).getPlato().getNombre();
+        } else {
+            return pedido.getItems().get(0).getPlato().getNombre() 
+                    + " (+" + (pedido.getItems().size() - 1) + " más)";
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
