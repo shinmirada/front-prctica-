@@ -1,9 +1,11 @@
 package vistas;
 
+import apiService.FacturaApiService;
 import apiService.PedidoApiService;
 import enums.Estado;
 import enums.Rol;
 import modelo.EstadoUpdateDTO;
+import modelo.Factura;
 import modelo.ItemPedido;
 import modelo.Pedido;
 import retrofit2.Call;
@@ -16,11 +18,14 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
-	private JPanel panelMatriz;
+    private JPanel panelMatriz;
     private PedidoApiService apiService;
+    private FacturaApiService facturaApiService;
     private Rol rolUsuario;
     private String clienteDoc;
 
@@ -41,6 +46,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
         Retrofit retrofit = RetrofitClient.getClient();
         apiService = retrofit.create(PedidoApiService.class);
+        facturaApiService = retrofit.create(FacturaApiService.class);
 
         panelMatriz = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
         JScrollPane scroll = new JScrollPane(panelMatriz);
@@ -60,7 +66,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
         JButton btnAtras = new JButton("Atrás");
         JButton btnActualizar = new JButton("Actualizar Lista");
-        JButton btnSiguiente = new JButton("Siguiente ➜");
+        JButton btnSiguiente = new JButton("Ver Facturas ➜");
 
         JButton[] navButtons = {btnAtras, btnActualizar, btnSiguiente};
         for (JButton b : navButtons) {
@@ -86,8 +92,9 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
         btnActualizar.addActionListener(e -> cargarPedidos());
 
+        // ✅ CORRECCIÓN: Ahora lleva a VentanaFacturasMesero
         btnSiguiente.addActionListener(e -> {
-            Ventana_Facturas ventana = new Ventana_Facturas(rolUsuario, clienteDoc);
+            VentanaFacturasMesero ventana = new VentanaFacturasMesero(rolUsuario, clienteDoc);
             ventana.setVisible(true);
             this.setVisible(false);
         });
@@ -95,7 +102,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         cargarPedidos();
     }
 
-    private void cargarPedidos() {
+   private void cargarPedidos() {
         panelMatriz.removeAll();
 
         try {
@@ -113,7 +120,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         panelMatriz.repaint();
     }
 
-    private void mostrarPedidos(List<Pedido> pedidos) {
+   private void mostrarPedidos(List<Pedido> pedidos) {
         for (Pedido pedido : pedidos) {
             String nombrePlato = obtenerNombrePlato(pedido);
             
@@ -137,6 +144,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
             panelMatriz.add(boton);
         }
     }
+
 
     private void mostrarDetallesPedido(Pedido pedido) {
         JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
@@ -171,6 +179,18 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         btnActualizar.setBackground(VERDE_MECCHA);
         btnActualizar.setForeground(Color.BLACK);
 
+        // ✅ NUEVO: Botón Generar Factura (solo si está FINALIZADO)
+        JButton btnGenerarFactura = null;
+        if (pedido.getEstado() == Estado.FINALIZADO) {
+            btnGenerarFactura = new JButton("💰 Generar Factura");
+            btnGenerarFactura.setBackground(new Color(255, 193, 7));
+            btnGenerarFactura.setFont(new Font("Dialog", Font.BOLD, 14));
+            
+            JButton finalBtnGenerarFactura = btnGenerarFactura;
+            btnGenerarFactura.addActionListener(e -> generarFactura(pedido));
+            panel.add(btnGenerarFactura);
+        }
+
         panel.add(btnActualizar);
 
         JDialog dialog = new JDialog(this, "Detalles del Pedido", true);
@@ -190,7 +210,51 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         dialog.setVisible(true);
     }
 
-    private Estado seleccionarNuevoEstado(Estado estadoActual) {
+    private void generarFactura(Pedido pedido) {
+        // Verificar si ya tiene factura
+        try {
+            String clienteDoc = pedido.getCliente().getDocumento();
+            Response<Factura> responseCheck = facturaApiService.getFacturaByPedidoYUsuario(
+                    pedido.getId(), clienteDoc).execute();
+            
+            if (responseCheck.isSuccessful() && responseCheck.body() != null) {
+                JOptionPane.showMessageDialog(this, 
+                    "⚠️ Este pedido ya tiene una factura generada\n" +
+                    "ID Factura: " + responseCheck.body().getFacturaid());
+                return;
+            }
+        } catch (IOException e) {
+            // Continuar si no se encuentra factura (es lo esperado)
+        }
+
+        // Crear la factura
+        Map<String, Object> facturaData = new HashMap<>();
+        facturaData.put("usuarioDoc", pedido.getCliente().getDocumento());
+        facturaData.put("pedidoId", pedido.getId());
+
+        try {
+            // Usar la firma correcta del método createFactura
+            Factura nuevaFactura = new Factura();
+            Response<Factura> response = facturaApiService.createFactura(nuevaFactura).execute();
+
+            if (response.isSuccessful() && response.body() != null) {
+                Factura factura = response.body();
+                JOptionPane.showMessageDialog(this, 
+                    "✅ Factura generada exitosamente\n\n" +
+                    "ID Factura: " + factura.getFacturaid() + "\n" +
+                    "Total: $" + String.format("%.2f", factura.getTotal()) + "\n" +
+                    "Cliente: " + factura.getUsuario().getNombre());
+            } else {
+                JOptionPane.showMessageDialog(this, 
+                    "❌ Error al generar factura (código: " + response.code() + ")");
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, 
+                "❌ Error de conexión al generar factura: " + e.getMessage());
+        }
+    }
+
+     private Estado seleccionarNuevoEstado(Estado estadoActual) {
         Estado[] opciones = switch (estadoActual) {
             case PENDIENTE ->
                 new Estado[]{Estado.PREPARACION};
@@ -211,11 +275,9 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         );
     }
 
-    private void actualizarEstadoPedido(int id, Estado nuevoEstado) {
+     private void actualizarEstadoPedido(int id, Estado nuevoEstado) {
         try {
-            // ✅ Crear DTO type-safe
             EstadoUpdateDTO dto = new EstadoUpdateDTO(nuevoEstado);
-            
             Call<Pedido> call = apiService.updateEstado(id, dto);
             Response<Pedido> response = call.execute();
 
@@ -244,6 +306,8 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
                     + " (+" + (pedido.getItems().size() - 1) + " más)";
         }
     }
+    
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

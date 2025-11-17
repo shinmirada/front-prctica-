@@ -118,41 +118,47 @@ public class VentanaDeCombos extends javax.swing.JFrame {
     }
 
  
-    private void dibujarBotonesDinamicos(List<Plato> platos) {
-        panelBotones.removeAll();
+ private void dibujarBotonesDinamicos(List<Plato> platos) {
+    panelBotones.removeAll();
 
-        int total = platos.size();
-        int filas = (int) Math.ceil(total / 3.0); 
-        botones = new JButton[filas][3];
-        panelBotones.setLayout(new GridLayout(filas, 3, 10, 10));
+    // ✅ Cambiar de 3 columnas a 4 para hacer botones más pequeños
+    int total = platos.size();
+    int filas = (int) Math.ceil(total / 4.0); // Ahora 4 por fila
+    botones = new JButton[filas][4];
+    panelBotones.setLayout(new GridLayout(filas, 4, 8, 8)); // Menos espacio
 
-        int index = 0;
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (index >= platos.size()) break;
+    int index = 0;
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < 4; j++) { // 4 columnas
+            if (index >= platos.size()) break;
 
-                Plato plato = platos.get(index);
-                JButton btnPlato = new JButton(plato.getNombre());
-                btnPlato.setBackground(BLANCO_CREMOSO);
-                btnPlato.setFont(new Font("Dialog", Font.PLAIN, 12));
+            Plato plato = platos.get(index);
+            JButton btnPlato = new JButton("<html><center>" + 
+                plato.getNombre() + "<br>$" + plato.getPrecio() + 
+                "</center></html>");
+            
+            // ✅ Botón más compacto
+            btnPlato.setBackground(BLANCO_CREMOSO);
+            btnPlato.setFont(new Font("Dialog", Font.BOLD, 11)); // Letra más pequeña
+            btnPlato.setPreferredSize(new Dimension(160, 80)); // Más pequeño
 
-                btnPlato.addActionListener(evt -> {
-                    new VentanaPlatos(
-                            plato.getNombre(),
-                            plato.getDescripcion(),
-                            "$" + plato.getPrecio()
-                    ).setVisible(true);
-                });
+            btnPlato.addActionListener(evt -> {
+                new VentanaPlatos(
+                        plato.getNombre(),
+                        plato.getDescripcion(),
+                        "$" + plato.getPrecio()
+                ).setVisible(true);
+            });
 
-                panelBotones.add(btnPlato);
-                botones[i][j] = btnPlato;
-                index++;
-            }
+            panelBotones.add(btnPlato);
+            botones[i][j] = btnPlato;
+            index++;
         }
-
-        panelBotones.revalidate();
-        panelBotones.repaint();
     }
+
+    panelBotones.revalidate();
+    panelBotones.repaint();
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
