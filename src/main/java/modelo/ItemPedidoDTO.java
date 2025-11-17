@@ -11,7 +11,6 @@ public class ItemPedidoDTO {
         this.cantidad = cantidad;
     }
 
-
     public Integer getPlatoId() { return platoId; }
     public void setPlatoId(Integer platoId) { this.platoId = platoId; }
     

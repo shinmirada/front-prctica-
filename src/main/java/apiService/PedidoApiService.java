@@ -3,7 +3,7 @@ package apiService;
 import enums.Estado;
 import java.util.List;
 import modelo.Pedido;
-import modelo.PedidoRequestDTO;  
+import modelo.PedidoRequestDTO;  // ✅ Importar el DTO
 
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -16,7 +16,7 @@ public interface PedidoApiService {
     @GET("/api/pedidos/{id}")
     Call<Pedido> getPedidoById(@Path("id") int id);
 
-    // ✅ CAMBIAR ESTO:
+    // ✅ USAR EL DTO AQUI
     @POST("/api/pedidos")
     Call<Pedido> createPedido(@Body PedidoRequestDTO pedidoRequest); 
 
