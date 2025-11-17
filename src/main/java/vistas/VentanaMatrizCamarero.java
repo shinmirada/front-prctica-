@@ -3,6 +3,7 @@ package vistas;
 import apiService.PedidoApiService;
 import enums.Estado;
 import enums.Rol;
+import modelo.EstadoUpdateDTO;
 import modelo.ItemPedido;
 import modelo.Pedido;
 import retrofit2.Call;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
-    private JPanel panelMatriz;
+	private JPanel panelMatriz;
     private PedidoApiService apiService;
     private Rol rolUsuario;
     private String clienteDoc;
@@ -57,7 +58,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         panelContenido.setBackground(ROSA_PASTEL);
         panelContenido.add(scroll, BorderLayout.CENTER);
 
-      
         JButton btnAtras = new JButton("Atrás");
         JButton btnActualizar = new JButton("Actualizar Lista");
         JButton btnSiguiente = new JButton("Siguiente ➜");
@@ -79,23 +79,19 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         getContentPane().add(panelContenido, BorderLayout.CENTER);
         getContentPane().add(panelNavegacion, BorderLayout.SOUTH);
 
-      
         btnAtras.addActionListener(e -> {
             new Ventana_InicioSesionUser().setVisible(true);
             this.setVisible(false);
         });
 
-   
         btnActualizar.addActionListener(e -> cargarPedidos());
 
-      
         btnSiguiente.addActionListener(e -> {
             Ventana_Facturas ventana = new Ventana_Facturas(rolUsuario, clienteDoc);
             ventana.setVisible(true);
             this.setVisible(false);
         });
 
-      
         cargarPedidos();
     }
 
@@ -119,7 +115,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
     private void mostrarPedidos(List<Pedido> pedidos) {
         for (Pedido pedido : pedidos) {
-            // ✅ Obtener nombre del plato desde items
             String nombrePlato = obtenerNombrePlato(pedido);
             
             JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + nombrePlato);
@@ -143,11 +138,9 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         }
     }
 
-
     private void mostrarDetallesPedido(Pedido pedido) {
         JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
         
-        // ✅ Mostrar todos los platos
         panel.add(new JLabel("=== PEDIDO #" + pedido.getId() + " ==="));
         panel.add(new JLabel(" "));
         panel.add(new JLabel("Platos:"));
@@ -165,7 +158,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         panel.add(new JLabel(" "));
         panel.add(new JLabel("Modalidad: " + (pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante")));
         
-        // ✅ CORRECTO: Acceder al cliente completo
         if (pedido.getCliente() != null) {
             panel.add(new JLabel("Cliente: " + pedido.getCliente().getNombre()));
             panel.add(new JLabel("Documento: " + pedido.getCliente().getDocumento()));
@@ -221,16 +213,22 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
     private void actualizarEstadoPedido(int id, Estado nuevoEstado) {
         try {
-            Call<Pedido> call = apiService.updateEstado(id, nuevoEstado);
+            // ✅ Crear DTO type-safe
+            EstadoUpdateDTO dto = new EstadoUpdateDTO(nuevoEstado);
+            
+            Call<Pedido> call = apiService.updateEstado(id, dto);
             Response<Pedido> response = call.execute();
 
             if (response.isSuccessful()) {
-                JOptionPane.showMessageDialog(this, "Estado actualizado correctamente a " + nuevoEstado);
+                JOptionPane.showMessageDialog(this, 
+                    "✅ Estado actualizado correctamente a " + nuevoEstado);
             } else {
-                JOptionPane.showMessageDialog(this, "Error al actualizar el estado (" + response.code() + ")");
+                JOptionPane.showMessageDialog(this, 
+                    "⚠️ Error al actualizar el estado (código: " + response.code() + ")");
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error al conectar con el servidor: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, 
+                "❌ Error al conectar con el servidor: " + e.getMessage());
         }
     }
     
@@ -242,7 +240,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         if (pedido.getItems().size() == 1) {
             return pedido.getItems().get(0).getPlato().getNombre();
         } else {
-            // Múltiples platos
             return pedido.getItems().get(0).getPlato().getNombre() 
                     + " (+" + (pedido.getItems().size() - 1) + " más)";
         }

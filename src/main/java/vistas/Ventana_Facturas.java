@@ -94,6 +94,9 @@ public class Ventana_Facturas extends javax.swing.JFrame {
                 Response<List<Factura>> response = apiService.getFacturasByUsuario(clienteDoc).execute();
                 if (response.isSuccessful()) {
                     return response.body();
+                } else if (response.code() == 404) {
+                    // ✅ CORRECCIÓN: Si es 404, retornar lista vacía en lugar de lanzar excepción
+                    return java.util.Collections.emptyList();
                 } else {
                     throw new IOException("Error HTTP: " + response.code());
                 }
@@ -104,24 +107,24 @@ public class Ventana_Facturas extends javax.swing.JFrame {
                 try {
                     List<Factura> facturas = get();
                     if (facturas == null || facturas.isEmpty()) {
+                        // ✅ CORRECCIÓN: Mostrar tabla vacía sin mensaje molesto
                         mostrarFacturasEnTabla(java.util.Collections.emptyList());
-                        JOptionPane.showMessageDialog(Ventana_Facturas.this, 
-                            "No tienes facturas registradas aún.");
                     } else {
                         mostrarFacturasEnTabla(facturas);
                     }
                     txtPedidoId.setText(""); // Limpiar campo de búsqueda
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                    JOptionPane.showMessageDialog(Ventana_Facturas.this,
                         "Error al cargar tus facturas: " + ex.getMessage());
                 }
             }
         };
         worker.execute();
     }
+
     private void filtrarPorPedido() {
         String pedidoIdStr = txtPedidoId.getText().trim();
-        
+
         if (pedidoIdStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor ingrese un ID de pedido");
             return;
@@ -129,11 +132,10 @@ public class Ventana_Facturas extends javax.swing.JFrame {
 
         try {
             int pedidoId = Integer.parseInt(pedidoIdStr);
-            
+
             javax.swing.SwingWorker<Factura, Void> worker = new javax.swing.SwingWorker<>() {
                 @Override
                 protected Factura doInBackground() throws Exception {
-                    // ✅ CORREGIDO: Usar el método correcto
                     Response<Factura> response = apiService.getFacturaByPedidoYUsuario(pedidoId, clienteDoc).execute();
                     if (response.isSuccessful()) {
                         return response.body();
@@ -150,19 +152,19 @@ public class Ventana_Facturas extends javax.swing.JFrame {
                         Factura factura = get();
                         if (factura == null) {
                             mostrarFacturasEnTabla(java.util.Collections.emptyList());
-                            JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                            JOptionPane.showMessageDialog(Ventana_Facturas.this,
                                 "No se encontró factura para el pedido #" + pedidoId);
                         } else {
                             mostrarFacturasEnTabla(List.of(factura));
                         }
                     } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(Ventana_Facturas.this, 
+                        JOptionPane.showMessageDialog(Ventana_Facturas.this,
                             "Error al buscar factura: " + ex.getMessage());
                     }
                 }
             };
             worker.execute();
-            
+
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "El ID del pedido debe ser numérico");
         }
@@ -179,16 +181,14 @@ public class Ventana_Facturas extends javax.swing.JFrame {
 
         if (facturas != null) {
             for (Factura f : facturas) {
-                // ✅ Formatear la fecha correctamente
-                String fechaStr = f.getFecha() != null 
+                String fechaStr = f.getFecha() != null
                     ? f.getFecha().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                     : "N/A";
-                
-                // ✅ Obtener ID del pedido correctamente
-                String pedidoIdStr = f.getPedido() != null 
+
+                String pedidoIdStr = f.getPedido() != null
                     ? String.valueOf(f.getPedido().getId())
                     : "N/A";
-                
+
                 model.addRow(new Object[]{
                     f.getFacturaid(),
                     fechaStr,

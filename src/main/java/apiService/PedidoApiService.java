@@ -1,9 +1,9 @@
 package apiService;
 
-import enums.Estado;
 import java.util.List;
+import modelo.EstadoUpdateDTO;
 import modelo.Pedido;
-import modelo.PedidoRequestDTO;  // ✅ Importar el DTO
+import modelo.PedidoRequestDTO;
 
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -16,12 +16,12 @@ public interface PedidoApiService {
     @GET("/api/pedidos/{id}")
     Call<Pedido> getPedidoById(@Path("id") int id);
 
-    // ✅ USAR EL DTO AQUI
     @POST("/api/pedidos")
     Call<Pedido> createPedido(@Body PedidoRequestDTO pedidoRequest); 
 
+    // ✅ Usar DTO type-safe
     @PATCH("/api/pedidos/{id}/estado")
-    Call<Pedido> updateEstado(@Path("id") int id, @Body Estado estado);
+    Call<Pedido> updateEstado(@Path("id") int id, @Body EstadoUpdateDTO estadoDTO);
 
     @DELETE("/api/pedidos/{id}")
     Call<Void> deletePedido(@Path("id") int id);
