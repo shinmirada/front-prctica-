@@ -118,7 +118,7 @@ public class VentanaMisPedidos extends javax.swing.JFrame {
             
             JButton boton = new JButton("Pedido #" + pedido.getId() + " - " + nombrePlato);
             boton.setBackground(BLANCO_CREMOSO);
-            boton.setForeground(Color.BLACK); // ← Cambiar a negro para que se vea
+            boton.setForeground(Color.BLACK);
             boton.setFont(new Font("Dialog", Font.PLAIN, 14));
 
             if (pedido.isEsDomicilio()) {
@@ -142,7 +142,13 @@ public class VentanaMisPedidos extends javax.swing.JFrame {
                 }
                 
                 detalles.append("Estado: ").append(pedido.getEstado()).append("\n");
-                detalles.append("Modalidad: ").append(pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante");
+                detalles.append("Modalidad: ").append(pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante").append("\n");
+                
+                // ✅ CORRECTO: Acceder al cliente completo
+                if (pedido.getCliente() != null) {
+                    detalles.append("Cliente: ").append(pedido.getCliente().getNombre()).append("\n");
+                    detalles.append("Documento: ").append(pedido.getCliente().getDocumento());
+                }
                 
                 JOptionPane.showMessageDialog(this, detalles.toString());
             });

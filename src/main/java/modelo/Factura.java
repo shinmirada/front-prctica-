@@ -1,85 +1,71 @@
 package modelo;
 
+import java.time.LocalDateTime;
+
 public class Factura {
-    private Long facturaid;
+    private Long facturaid;  // ← Debe ser Long (ID en el backend es Long)
     private double total;
-    private String fecha;
-    private String usuarioDoc;
-    private int pedidoId;
+    private LocalDateTime fecha;  // ← CAMBIAR: De String a LocalDateTime
+    private Pedido pedido;        // ← CAMBIAR: De int a Pedido completo
+    private Usuario usuario;      // ← CAMBIAR: De String a Usuario completo
 
     public Factura() {}
 
-   
-    
-    public Factura(Long facturaid, double total, String fecha, String usuarioDoc, int pedidoId) {
+    public Factura(Long facturaid, double total, LocalDateTime fecha, Pedido pedido, Usuario usuario) {
+        this.facturaid = facturaid;
+        this.total = total;
+        this.fecha = fecha;
+        this.pedido = pedido;
+        this.usuario = usuario;
+    }
 
-		this.facturaid = facturaid;
-		this.total = total;
-		this.fecha = fecha;
-		this.usuarioDoc = usuarioDoc;
-		this.pedidoId = pedidoId;
-	}
+    // Getters y Setters
+    public Long getFacturaid() {
+        return facturaid;
+    }
 
+    public void setFacturaid(Long facturaid) {
+        this.facturaid = facturaid;
+    }
 
+    public double getTotal() {
+        return total;
+    }
 
-	public Long getFacturaid() {
-		return facturaid;
-	}
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
 
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
 
-	public void setFacturaid(Long facturaid) {
-		this.facturaid = facturaid;
-	}
+    public Pedido getPedido() {
+        return pedido;
+    }
 
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-	public double getTotal() {
-		return total;
-	}
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
+    // ✅ AGREGAR: Métodos helper para retrocompatibilidad
+    public int getPedidoId() {
+        return pedido != null ? pedido.getId() : 0;
+    }
 
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-
-
-	public String getFecha() {
-		return fecha;
-	}
-
-
-
-	public void setFecha(String fecha) {
-		this.fecha = fecha;
-	}
-
-
-
-	public String getUsuarioDoc() {
-		return usuarioDoc;
-	}
-
-
-
-	public void setUsuarioDoc(String usuarioDoc) {
-		this.usuarioDoc = usuarioDoc;
-	}
-
-
-
-	public int getPedidoId() {
-		return pedidoId;
-	}
-
-
-
-	public void setPedidoId(int pedidoId) {
-		this.pedidoId = pedidoId;
-	}
-
-
-
+    public String getUsuarioDoc() {
+        return usuario != null ? usuario.getDocumento() : null;
+    }
 }

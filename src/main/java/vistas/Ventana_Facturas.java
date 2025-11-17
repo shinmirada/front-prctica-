@@ -179,11 +179,21 @@ public class Ventana_Facturas extends javax.swing.JFrame {
 
         if (facturas != null) {
             for (Factura f : facturas) {
+                // ✅ Formatear la fecha correctamente
+                String fechaStr = f.getFecha() != null 
+                    ? f.getFecha().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                    : "N/A";
+                
+                // ✅ Obtener ID del pedido correctamente
+                String pedidoIdStr = f.getPedido() != null 
+                    ? String.valueOf(f.getPedido().getId())
+                    : "N/A";
+                
                 model.addRow(new Object[]{
-                    f.getFacturaid(),           // ✅ Ahora es Long id
-                    f.getFecha(),        // ✅ LocalDateTime fecha
-                    f.getPedidoId(),  // ✅ Obtener ID del pedido
-                    "$" + String.format("%.2f", f.getTotal())  // ✅ BigDecimal total
+                    f.getFacturaid(),
+                    fechaStr,
+                    pedidoIdStr,
+                    "$" + String.format("%.2f", f.getTotal())
                 });
             }
         }

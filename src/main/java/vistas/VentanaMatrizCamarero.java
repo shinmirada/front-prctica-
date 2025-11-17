@@ -143,6 +143,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         }
     }
 
+
     private void mostrarDetallesPedido(Pedido pedido) {
         JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
         
@@ -163,7 +164,15 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         
         panel.add(new JLabel(" "));
         panel.add(new JLabel("Modalidad: " + (pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante")));
-        panel.add(new JLabel("Cliente Doc: " + pedido.getClienteDoc()));
+        
+        // ✅ CORRECTO: Acceder al cliente completo
+        if (pedido.getCliente() != null) {
+            panel.add(new JLabel("Cliente: " + pedido.getCliente().getNombre()));
+            panel.add(new JLabel("Documento: " + pedido.getCliente().getDocumento()));
+        } else {
+            panel.add(new JLabel("Cliente: (Sin información)"));
+        }
+        
         panel.add(new JLabel("Estado actual: " + pedido.getEstado()));
 
         JButton btnActualizar = new JButton("Actualizar Estado");

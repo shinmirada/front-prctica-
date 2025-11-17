@@ -1,4 +1,3 @@
-
 package modelo;
 
 import enums.Estado;
@@ -10,7 +9,7 @@ public class Pedido {
     private LocalDateTime fecha;
     private boolean esDomicilio;
     private Estado estado;
-    private String clienteDoc;
+    private Usuario cliente;  // ← CAMBIAR: Ya no es String, ahora es Usuario completo
     private List<ItemPedido> items; 
     
     public Pedido() {}
@@ -28,8 +27,14 @@ public class Pedido {
     public Estado getEstado() { return estado; }
     public void setEstado(Estado estado) { this.estado = estado; }
     
-    public String getClienteDoc() { return clienteDoc; }
-    public void setClienteDoc(String clienteDoc) { this.clienteDoc = clienteDoc; }
+    // ✅ NUEVO: Ahora es Usuario completo
+    public Usuario getCliente() { return cliente; }
+    public void setCliente(Usuario cliente) { this.cliente = cliente; }
+    
+    // ✅ AGREGAR: Método helper para obtener solo el documento (retrocompatibilidad)
+    public String getClienteDoc() { 
+        return cliente != null ? cliente.getDocumento() : null; 
+    }
     
     public List<ItemPedido> getItems() { return items; }
     public void setItems(List<ItemPedido> items) { this.items = items; }
