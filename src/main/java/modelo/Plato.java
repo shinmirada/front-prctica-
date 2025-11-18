@@ -1,21 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package modelo;
 
-/**
- *
- * @author Dilan
- */
 public class Plato {
 
-    private int id;
+    private Integer id;  // ✅ IMPORTANTE: Puede ser null
     private String nombre;
     private String descripcion;
     private double precio;
 
     public Plato() {
+        // ✅ NO inicializar id aquí, dejarlo null
     }
 
     public Plato(int id, String nombre, String descripcion, double precio) {
@@ -24,12 +17,20 @@ public class Plato {
         this.descripcion = descripcion;
         this.precio = precio;
     }
+    
+    // ✅ Constructor SIN id para crear platos nuevos
+    public Plato(String nombre, String descripcion, double precio) {
+        this.id = null;  // Explícitamente null
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.precio = precio;
+    }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

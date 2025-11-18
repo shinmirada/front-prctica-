@@ -1,6 +1,7 @@
 package apiService;
 
 import java.util.List;
+import java.util.Map;
 import modelo.Factura;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -11,7 +12,7 @@ public interface FacturaApiService {
     @GET("/api/facturas")
     Call<List<Factura>> getAllFacturas();
 
-    // 🆕 Obtener facturas por documento del usuario
+    // Obtener facturas por documento del usuario
     @GET("/api/facturas/documento/{documento}")
     Call<List<Factura>> getFacturasByUsuario(@Path("documento") String documento);
 
@@ -29,7 +30,7 @@ public interface FacturaApiService {
             @Path("documento") String documento
     );
 
-    // Crear una nueva factura
+    // ✅ CORRECCIÓN: Crear factura con Map en el body
     @POST("/api/facturas")
-    Call<Factura> createFactura(@Body Factura factura);
+    Call<Factura> createFactura(@Body Map<String, Object> facturaData);
 }

@@ -18,8 +18,6 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.IOException;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
@@ -42,6 +40,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
         setTitle("Pedidos Existentes");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         Retrofit retrofit = RetrofitClient.getClient();
@@ -92,7 +91,6 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
         btnActualizar.addActionListener(e -> cargarPedidos());
 
-        // ✅ CORRECCIÓN: Ahora lleva a VentanaFacturasMesero
         btnSiguiente.addActionListener(e -> {
             VentanaFacturasMesero ventana = new VentanaFacturasMesero(rolUsuario, clienteDoc);
             ventana.setVisible(true);
@@ -102,7 +100,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         cargarPedidos();
     }
 
-   private void cargarPedidos() {
+    private void cargarPedidos() {
         panelMatriz.removeAll();
 
         try {
@@ -120,7 +118,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         panelMatriz.repaint();
     }
 
-   private void mostrarPedidos(List<Pedido> pedidos) {
+    private void mostrarPedidos(List<Pedido> pedidos) {
         for (Pedido pedido : pedidos) {
             String nombrePlato = obtenerNombrePlato(pedido);
             
@@ -145,56 +143,102 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         }
     }
 
-
     private void mostrarDetallesPedido(Pedido pedido) {
-        JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
+        // ✅ Panel con mejor estructura y fuente más grande
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        panel.add(new JLabel("=== PEDIDO #" + pedido.getId() + " ==="));
-        panel.add(new JLabel(" "));
-        panel.add(new JLabel("Platos:"));
+        // Título del pedido
+        JLabel lblTitulo = new JLabel("=== PEDIDO #" + pedido.getId() + " ===");
+        lblTitulo.setFont(new Font("Dialog", Font.BOLD, 18));
+        lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(lblTitulo);
+        panel.add(Box.createVerticalStrut(15));
+        
+        // Platos
+        JLabel lblPlatos = new JLabel("🍽️ Platos:");
+        lblPlatos.setFont(new Font("Dialog", Font.BOLD, 15));
+        panel.add(lblPlatos);
+        panel.add(Box.createVerticalStrut(5));
         
         if (pedido.getItems() != null && !pedido.getItems().isEmpty()) {
             for (ItemPedido item : pedido.getItems()) {
-                panel.add(new JLabel("  • " + item.getPlato().getNombre() 
+                JLabel lblItem = new JLabel("  • " + item.getPlato().getNombre() 
                         + " x" + item.getCantidad() 
-                        + " ($" + item.getPrecioUnitario() + ")"));
+                        + " ($" + String.format("%.0f", item.getPrecioUnitario()) + ")");
+                lblItem.setFont(new Font("Dialog", Font.PLAIN, 14));
+                panel.add(lblItem);
             }
         } else {
-            panel.add(new JLabel("  (Sin items)"));
+            JLabel lblSinItems = new JLabel("  (Sin items)");
+            lblSinItems.setFont(new Font("Dialog", Font.ITALIC, 14));
+            panel.add(lblSinItems);
         }
         
-        panel.add(new JLabel(" "));
-        panel.add(new JLabel("Modalidad: " + (pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante")));
+        panel.add(Box.createVerticalStrut(15));
         
+        // Modalidad
+        String modalidadTexto = pedido.isEsDomicilio() ? "🏠 Domicilio" : "🍽️ Restaurante";
+        JLabel lblModalidad = new JLabel("Modalidad: " + modalidadTexto);
+        lblModalidad.setFont(new Font("Dialog", Font.BOLD, 14));
+        panel.add(lblModalidad);
+        panel.add(Box.createVerticalStrut(10));
+        
+        // Cliente
         if (pedido.getCliente() != null) {
-            panel.add(new JLabel("Cliente: " + pedido.getCliente().getNombre()));
-            panel.add(new JLabel("Documento: " + pedido.getCliente().getDocumento()));
+            JLabel lblCliente = new JLabel("👤 Cliente: " + pedido.getCliente().getNombre());
+            lblCliente.setFont(new Font("Dialog", Font.PLAIN, 14));
+            panel.add(lblCliente);
+            
+            JLabel lblDoc = new JLabel("📋 Documento: " + pedido.getCliente().getDocumento());
+            lblDoc.setFont(new Font("Dialog", Font.PLAIN, 14));
+            panel.add(lblDoc);
         } else {
-            panel.add(new JLabel("Cliente: (Sin información)"));
+            JLabel lblSinCliente = new JLabel("Cliente: (Sin información)");
+            lblSinCliente.setFont(new Font("Dialog", Font.ITALIC, 14));
+            panel.add(lblSinCliente);
         }
         
-        panel.add(new JLabel("Estado actual: " + pedido.getEstado()));
+        panel.add(Box.createVerticalStrut(10));
+        
+        // Estado
+        JLabel lblEstado = new JLabel("📊 Estado actual: " + pedido.getEstado());
+        lblEstado.setFont(new Font("Dialog", Font.BOLD, 15));
+        panel.add(lblEstado);
+        
+        panel.add(Box.createVerticalStrut(20));
 
-        JButton btnActualizar = new JButton("Actualizar Estado");
+        // Botón Actualizar Estado
+        JButton btnActualizar = new JButton("🔄 Actualizar Estado");
         btnActualizar.setBackground(VERDE_MECCHA);
         btnActualizar.setForeground(Color.BLACK);
+        btnActualizar.setFont(new Font("Dialog", Font.BOLD, 14));
+        btnActualizar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(btnActualizar);
+        
+        panel.add(Box.createVerticalStrut(10));
 
-        // ✅ NUEVO: Botón Generar Factura (solo si está FINALIZADO)
-        JButton btnGenerarFactura = null;
+        // ✅ Botón Generar Factura (solo si está FINALIZADO)
         if (pedido.getEstado() == Estado.FINALIZADO) {
-            btnGenerarFactura = new JButton("💰 Generar Factura");
+            JButton btnGenerarFactura = new JButton("💰 Generar Factura");
             btnGenerarFactura.setBackground(new Color(255, 193, 7));
+            btnGenerarFactura.setForeground(Color.BLACK);
             btnGenerarFactura.setFont(new Font("Dialog", Font.BOLD, 14));
-            
-            JButton finalBtnGenerarFactura = btnGenerarFactura;
+            btnGenerarFactura.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnGenerarFactura.addActionListener(e -> generarFactura(pedido));
             panel.add(btnGenerarFactura);
         }
 
-        panel.add(btnActualizar);
-
+        // ✅ VENTANA MÁS GRANDE CON SCROLL (500x500)
         JDialog dialog = new JDialog(this, "Detalles del Pedido", true);
-        dialog.add(panel);
+        dialog.setLayout(new BorderLayout(10, 10));
+        
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setPreferredSize(new Dimension(500, 500));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        
+        dialog.add(scrollPane, BorderLayout.CENTER);
         dialog.pack();
         dialog.setLocationRelativeTo(this);
 
@@ -220,22 +264,22 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
             if (responseCheck.isSuccessful() && responseCheck.body() != null) {
                 JOptionPane.showMessageDialog(this, 
                     "⚠️ Este pedido ya tiene una factura generada\n" +
-                    "ID Factura: " + responseCheck.body().getFacturaid());
+                    "ID Factura: " + responseCheck.body().getFacturaid(),
+                    "Factura Existente",
+                    JOptionPane.WARNING_MESSAGE);
                 return;
             }
         } catch (IOException e) {
             // Continuar si no se encuentra factura (es lo esperado)
         }
 
-        // Crear la factura
-        Map<String, Object> facturaData = new HashMap<>();
-        facturaData.put("usuarioDoc", pedido.getCliente().getDocumento());
-        facturaData.put("pedidoId", pedido.getId());
-
+        // ✅ CORRECCIÓN: Crear factura usando Map con los datos correctos
         try {
-            // Usar la firma correcta del método createFactura
-            Factura nuevaFactura = new Factura();
-            Response<Factura> response = facturaApiService.createFactura(nuevaFactura).execute();
+            java.util.Map<String, Object> facturaData = new java.util.HashMap<>();
+            facturaData.put("usuarioDoc", pedido.getCliente().getDocumento());
+            facturaData.put("pedidoId", pedido.getId());
+
+            Response<Factura> response = facturaApiService.createFactura(facturaData).execute();
 
             if (response.isSuccessful() && response.body() != null) {
                 Factura factura = response.body();
@@ -243,18 +287,32 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
                     "✅ Factura generada exitosamente\n\n" +
                     "ID Factura: " + factura.getFacturaid() + "\n" +
                     "Total: $" + String.format("%.2f", factura.getTotal()) + "\n" +
-                    "Cliente: " + factura.getUsuario().getNombre());
+                    "Cliente: " + factura.getUsuario().getNombre(),
+                    "Factura Generada",
+                    JOptionPane.INFORMATION_MESSAGE);
             } else {
+                String errorBody = "";
+                try {
+                    errorBody = response.errorBody() != null ? response.errorBody().string() : "";
+                } catch (Exception ex) {}
+                
                 JOptionPane.showMessageDialog(this, 
-                    "❌ Error al generar factura (código: " + response.code() + ")");
+                    "❌ Error al generar factura\n" +
+                    "Código: " + response.code() + "\n" +
+                    "Detalle: " + errorBody,
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, 
-                "❌ Error de conexión al generar factura: " + e.getMessage());
+                "❌ Error de conexión al generar factura:\n" + e.getMessage(),
+                "Error de Conexión",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
-     private Estado seleccionarNuevoEstado(Estado estadoActual) {
+    private Estado seleccionarNuevoEstado(Estado estadoActual) {
         Estado[] opciones = switch (estadoActual) {
             case PENDIENTE ->
                 new Estado[]{Estado.PREPARACION};
@@ -275,7 +333,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
         );
     }
 
-     private void actualizarEstadoPedido(int id, Estado nuevoEstado) {
+    private void actualizarEstadoPedido(int id, Estado nuevoEstado) {
         try {
             EstadoUpdateDTO dto = new EstadoUpdateDTO(nuevoEstado);
             Call<Pedido> call = apiService.updateEstado(id, dto);
@@ -283,14 +341,20 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
 
             if (response.isSuccessful()) {
                 JOptionPane.showMessageDialog(this, 
-                    "✅ Estado actualizado correctamente a " + nuevoEstado);
+                    "✅ Estado actualizado correctamente a " + nuevoEstado,
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, 
-                    "⚠️ Error al actualizar el estado (código: " + response.code() + ")");
+                    "⚠️ Error al actualizar el estado (código: " + response.code() + ")",
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE);
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, 
-                "❌ Error al conectar con el servidor: " + e.getMessage());
+                "❌ Error al conectar con el servidor: " + e.getMessage(),
+                "Error de Conexión",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -306,8 +370,7 @@ public class VentanaMatrizCamarero extends javax.swing.JFrame {
                     + " (+" + (pedido.getItems().size() - 1) + " más)";
         }
     }
-    
-    
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

@@ -1,4 +1,3 @@
-
 package vistas;
 
 import apiService.PlatoApiService;
@@ -19,7 +18,7 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
     private PlatoApiService apiService;
     private JTable tblPlatos;
     private JTextField txtNombre, txtDescripcion, txtPrecio;
-    private JButton btnAgregar, btnActualizar, btnEliminar, btnLimpiar, btnRefrescar;
+    private JButton btnAgregar, btnActualizar, btnLimpiar, btnRefrescar;
     private Rol rolUsuario;
     private String adminDoc;
     private Integer platoSeleccionadoId = null;
@@ -99,8 +98,8 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
         gbc.gridx = 1;
         panelFormulario.add(txtPrecio, gbc);
 
-        // Botones CRUD
-        JPanel panelBotonesCRUD = new JPanel(new GridLayout(2, 2, 10, 10));
+        // Botones CRUD (solo 3 botones ahora)
+        JPanel panelBotonesCRUD = new JPanel(new GridLayout(1, 3, 10, 10));
         panelBotonesCRUD.setOpaque(false);
 
         btnAgregar = new JButton("➕ Agregar");
@@ -114,13 +113,6 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
         btnActualizar.addActionListener(e -> actualizarPlato());
         btnActualizar.setEnabled(false);
 
-        btnEliminar = new JButton("🗑️ Eliminar");
-        btnEliminar.setBackground(ROJO_TORII);
-        btnEliminar.setForeground(BLANCO_CREMOSO);
-        btnEliminar.setFont(new Font("Dialog", Font.BOLD, 13));
-        btnEliminar.addActionListener(e -> eliminarPlato());
-        btnEliminar.setEnabled(false);
-
         btnLimpiar = new JButton("🔄 Limpiar");
         btnLimpiar.setBackground(MARRON_MADERA);
         btnLimpiar.setForeground(BLANCO_CREMOSO);
@@ -129,7 +121,6 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
 
         panelBotonesCRUD.add(btnAgregar);
         panelBotonesCRUD.add(btnActualizar);
-        panelBotonesCRUD.add(btnEliminar);
         panelBotonesCRUD.add(btnLimpiar);
 
         gbc.gridx = 0;
@@ -229,16 +220,19 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
 
         btnAgregar.setEnabled(false);
         btnActualizar.setEnabled(true);
-        btnEliminar.setEnabled(true);
     }
 
     private void agregarPlato() {
         if (!validarCampos()) return;
 
+        // ✅ Crear Plato sin establecer ID (quedará como null)
         Plato plato = new Plato();
         plato.setNombre(txtNombre.getText().trim());
         plato.setDescripcion(txtDescripcion.getText().trim());
         plato.setPrecio(Double.parseDouble(txtPrecio.getText().trim()));
+        
+        // ✅ CRÍTICO: Asegurarse que el ID sea null
+        plato.setId(null);
 
         try {
             Response<Plato> response = apiService.createPlato(plato).execute();
@@ -247,7 +241,7 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
                 limpiarFormulario();
                 cargarPlatos();
             } else {
-                JOptionPane.showMessageDialog(this, "❌ Error al agregar plato");
+                JOptionPane.showMessageDialog(this, "❌ Error al agregar plato: " + response.code());
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error de conexión: " + e.getMessage());
@@ -272,30 +266,6 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error de conexión: " + e.getMessage());
-        }
-    }
-
-    private void eliminarPlato() {
-        if (platoSeleccionadoId == null) return;
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro de eliminar este plato?",
-                "Confirmar Eliminación",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                Response<Void> response = apiService.deletePlato(platoSeleccionadoId).execute();
-                if (response.isSuccessful()) {
-                    JOptionPane.showMessageDialog(this, "✅ Plato eliminado correctamente");
-                    limpiarFormulario();
-                    cargarPlatos();
-                } else {
-                    JOptionPane.showMessageDialog(this, "❌ Error al eliminar plato");
-                }
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error de conexión: " + e.getMessage());
-            }
         }
     }
 
@@ -326,7 +296,6 @@ public class VentanaAdminPlatos extends javax.swing.JFrame {
 
         btnAgregar.setEnabled(true);
         btnActualizar.setEnabled(false);
-        btnEliminar.setEnabled(false);
     }
 
     @SuppressWarnings("unchecked")
