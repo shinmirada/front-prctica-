@@ -95,7 +95,7 @@ public class Ventana_Facturas extends javax.swing.JFrame {
                 if (response.isSuccessful()) {
                     return response.body();
                 } else if (response.code() == 404) {
-                    // ✅ CORRECCIÓN: Si es 404, retornar lista vacía en lugar de lanzar excepción
+                    // ✅ Retornar lista vacía en lugar de excepción
                     return java.util.Collections.emptyList();
                 } else {
                     throw new IOException("Error HTTP: " + response.code());
@@ -107,15 +107,15 @@ public class Ventana_Facturas extends javax.swing.JFrame {
                 try {
                     List<Factura> facturas = get();
                     if (facturas == null || facturas.isEmpty()) {
-                        // ✅ CORRECCIÓN: Mostrar tabla vacía sin mensaje molesto
+                        // ✅ Mostrar tabla vacía SIN mensaje molesto
                         mostrarFacturasEnTabla(java.util.Collections.emptyList());
                     } else {
                         mostrarFacturasEnTabla(facturas);
                     }
-                    txtPedidoId.setText(""); // Limpiar campo de búsqueda
+                    txtPedidoId.setText("");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(Ventana_Facturas.this,
-                        "Error al cargar tus facturas: " + ex.getMessage());
+                        "Error al cargar facturas: " + ex.getMessage());
                 }
             }
         };

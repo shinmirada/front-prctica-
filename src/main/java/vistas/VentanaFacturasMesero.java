@@ -155,8 +155,8 @@ public class VentanaFacturasMesero extends javax.swing.JFrame {
             if (response.isSuccessful() && response.body() != null) {
                 mostrarFacturasEnTabla(response.body());
             } else {
+                // ✅ Mostrar tabla vacía sin mensaje de error
                 mostrarFacturasEnTabla(java.util.Collections.emptyList());
-                JOptionPane.showMessageDialog(this, "No se encontraron facturas para ese cliente");
             }
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error de conexión: " + e.getMessage());
